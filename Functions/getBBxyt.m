@@ -1,13 +1,11 @@
 function [BBxyt]= getBBxyt(observer)
 
-cmfs = readtable('MetaMetric_Project\Standards\ISOCIE_11664_1_2019\ISOCIE_11664_1_2019_2deg10deg.xlsx');
+cmfs = readtable('MetaMetric\Standards\ISOCIE_11664_1_2019\ISOCIE_11664_1_2019_2deg10deg.xlsx');
 cmfs = table2array(cmfs);
 switch observer
     case 2
-
         xyzbar = cmfs(:,2:4);
     case 10
-
         xyzbar = cmfs(:,5:7);
 end
 wv = cmfs(:,1);

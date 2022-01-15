@@ -4,7 +4,7 @@
 % [xyUserSPDs,XYZUserSPDs] = spdsToXyXYZ(userSPDs(:,1:end), 2 );%get xy chromaticities for the imported spds
 %% Rename the functions argments to be the app's properties. 
 % This is verbose but might help understand code better
-xyUserSPDs = app.xyUserSPDsProp;
+xyUserSPDs = app.xyUserSPDs_Prop;
 %% Add the xy coordinates of the spds to the chrom diagram plot
 scatter(app.UIAxes_ChromDiagram, xyUserSPDs(:,1), xyUserSPDs(:,2) ); %plot them
 %% Don't overwrite plot each time a new plot is added
