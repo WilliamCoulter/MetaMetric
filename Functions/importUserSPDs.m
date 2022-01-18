@@ -2,9 +2,9 @@ function [userSPDs, wlInt] = importUserSPDs(fileName,sheetName)
 %give the filename and the sheet and it will import the spds, assuming the
 %power starts on line 10 and on column 2
 
-%% Load Filename
+%% Load Filenam
 T_User = readtable(fileName,"Sheet", sheetName);
-
+% T_User = readtable(fileName,"Sheet", sheetName,ReadVariableNames=false);
 %% Pull the table of powers, assuming 380 to 780
 T_Pow    = (T_User(10:end, 2:end) );
 
