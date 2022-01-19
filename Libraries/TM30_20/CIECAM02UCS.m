@@ -50,7 +50,9 @@ c = 0.69;
 %%
 % Rx = A_CES(1:wlInt:end,2:3);
 %
-XYZ_Test     = ((spdInputScaled.*RxArray)'*cmf10);
+wlInt = 400/(size(spdInput,1)-1); %determine interval
+
+XYZ_Test     = ((spdInputScaled.*RxArray(1:wlInt:end,:))'*cmf10);
 XYZ_W = (spdInputScaled'*cmf10); 
 %% Deal with the reference metrics. The reference is the same for all Rx values
 
