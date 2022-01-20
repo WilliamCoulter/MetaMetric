@@ -4,12 +4,12 @@
 % 1) user spds are at 100%, so we divide by 100 to get spd/percent. Then
 % we can multiply by 50 or 100 to get the real percent values.
 % Reset everything
-function [SpdMixOut,myOptimOptions] = Main_Optimizer_Function_App_mfile(spdPercents_0,spdChannels,  uit_constraints, myUiFun)
+function [SpdMixOut,myOptimOptions,iterationStop] = Main_Optimizer_Function_App_mfile(spdPercents_0,spdChannels,  uit_constraints, myUiFun,appStopFlag)
 
 %% *Setup Output function*
 % https://www.mathworks.com/help/optim/ug/passing-extra-parameters.html
 % https://www.mathworks.com/help/optim/ug/output-function-problem-based.html#UseAnOutputFunctionForProblemBasedOptimizationExample-3
-myOutFun = @(solution,optimValues,state)myOutFunPassed(solution,state,spdChannels);
+myOutFun = @(solution,optimValues,state)myOutFunPassed(solution,optimValues,state,spdChannels,appStopFlag);
 
 %% Optimizer Output
 % Pass fixed parameters to objfun
@@ -21,7 +21,7 @@ confun = @(spdPercents)myFunConstraint(spdPercents,spdChannels,uit_constraints);
 %% Set optimization options
 options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
     'MaxIterations',myUiFun.myOptIterations,'OutputFcn',myOutFun,'ScaleProblem',true,...
-    'BarrierParamUpdate','predictor-corrector','HonorBounds',false,'TypicalX',50*ones(length(spdPercents_0),1),'UseParallel',false);
+    'BarrierParamUpdate','predictor-corrector','HonorBounds',true,'TypicalX',50*ones(length(spdPercents_0),1),'UseParallel',false);
 %     'EnableFeasibilityMode',true,'SubproblemAlgorithm','cg'); %this line suggested by matlab
 
 %% Run optimize function
@@ -52,20 +52,43 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
     end
 
 %% Output Function
-    function stop = myOutFunPassed(solution,state,spdChannels)
+    function stop = myOutFunPassed(solution,optimValues,state,spdChannels,appStopFlag)
         %https://www.mathworks.com/help/optim/ug/output-functions.html
         %https://www.mathworks.com/help/optim/ug/output-function-problem-based.html
+%         app.OptimizationRunStopTF_Prop
+%         t = get(gcf);
+        stop = appStopFlag;
+%         stop = app.OptimizationRunStopTF_Prop;
+%         if stop == true
+%             SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
+%             iterationStop = optimValues.iteration;
+%             return
+%         end
 
-        stop = false;
+%         stop = app.ButtonStop.Value
         switch state
             case 'init'
                 myOptimOptions = options;
 
             case 'iter' %store only the only things that go to output function :(
+                
+                if optimValues.iteration ==0
+%                     getappdata()
+%                     disp(app.importedFileName_Prop)
 
+%                     defFig = get(gcf);
+%                     a=1;
+%                     plotSPD = plot(spdChannels*spdPercents_0);
+%                     set(gca, 'xlim',[380, 780]);
+%                     set(plotSPD,'Tag','optimPlotSPD');
+                elseif mod(optimValues.iteration,10) ==0
+                    disp(optimValues.iteration)
+%                     plotSPD = findobj(get(gca,'Children'),'Tag','optimPlotSPD');
+%                     set(plotSPD, 'YData', spdChannels*solution);
+                end
             case 'done' %recreate all the metrics
                 SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
-                %             optimValues = optimValues;
+                iterationStop = optimValues.iteration;
 
         end
     end
