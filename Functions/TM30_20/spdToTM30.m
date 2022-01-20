@@ -68,7 +68,7 @@ end
     end
 
     if isempty(A_Planck)
-        load("Libraries/TM30_20/Table_Planck.mat");
+        load("Functions/TM30_20/Table_Planck.mat");
         disp('Loaded Table Planck')
         A_Planck = Table_Planck;
         A_Planck(:,5) = 1:height(A_Planck);
