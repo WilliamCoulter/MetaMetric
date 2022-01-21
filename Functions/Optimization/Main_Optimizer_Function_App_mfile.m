@@ -21,7 +21,8 @@ confun = @(spdPercents)myFunConstraint(spdPercents,spdChannels,uit_constraints);
 %% Set optimization options
 options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
     'MaxIterations',myUiFun.myOptIterations,'OutputFcn',myOutFun,'ScaleProblem',true,...
-    'BarrierParamUpdate','predictor-corrector','HonorBounds',true,'TypicalX',50*ones(length(spdPercents_0),1),'UseParallel',false);
+    'BarrierParamUpdate','predictor-corrector','HonorBounds',true,'TypicalX',50*ones(length(spdPercents_0),1),'UseParallel',false,...
+    'PlotFcn',{@optimplotx,@optimplotfval});
 %     'EnableFeasibilityMode',true,'SubproblemAlgorithm','cg'); %this line suggested by matlab
 
 %% Run optimize function
@@ -57,11 +58,12 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
         %https://www.mathworks.com/help/optim/ug/output-function-problem-based.html
 %         app.OptimizationRunStopTF_Prop
 %         t = get(gcf);
-        stop = appStopFlag;
+        stop = false;
 %         stop = app.OptimizationRunStopTF_Prop;
 %         if stop == true
-%             SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
-%             iterationStop = optimValues.iteration;
+% %             SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
+% %             iterationStop = optimValues.iteration;
+%             disp("entered")
 %             return
 %         end
 
@@ -88,9 +90,13 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
                 end
             case 'done' %recreate all the metrics
                 SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
+                SpdMixOut.Solution = solution;
                 iterationStop = optimValues.iteration;
 
         end
+        SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
+        SpdMixOut.Solution = solution;
+        iterationStop = optimValues.iteration;
     end
 
 
