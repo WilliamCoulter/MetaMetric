@@ -59,6 +59,7 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
 %         app.OptimizationRunStopTF_Prop
 %         t = get(gcf);
         stop = false;
+%         a = 1;
 %         stop = app.OptimizationRunStopTF_Prop;
 %         if stop == true
 % %             SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
