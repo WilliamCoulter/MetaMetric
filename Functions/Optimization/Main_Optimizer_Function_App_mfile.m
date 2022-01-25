@@ -21,8 +21,8 @@ confun = @(spdPercents)myFunConstraint(spdPercents,spdChannels,uit_constraints);
 %% Set optimization options
 options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
     'MaxIterations',myUiFun.myOptIterations,'OutputFcn',myOutFun,'ScaleProblem',true,...
-    'BarrierParamUpdate','predictor-corrector','HonorBounds',true,'TypicalX',50*ones(length(spdPercents_0),1),'UseParallel',false,...
-    'PlotFcn',{@optimplotx,@optimplotfval});
+    'BarrierParamUpdate','predictor-corrector','HonorBounds',false,'TypicalX',50*ones(length(spdPercents_0),1),'UseParallel',false,...
+    'PlotFcn',{@optimplotx,@optimplotfval,@optimplotconstrviolation});
 %     'EnableFeasibilityMode',true,'SubproblemAlgorithm','cg'); %this line suggested by matlab
 
 %% Run optimize function
@@ -85,7 +85,7 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
 %                     set(gca, 'xlim',[380, 780]);
 %                     set(plotSPD,'Tag','optimPlotSPD');
                 elseif mod(optimValues.iteration,10) ==0
-                    disp(optimValues.iteration)
+%                     disp(optimValues.iteration)
 %                     plotSPD = findobj(get(gca,'Children'),'Tag','optimPlotSPD');
 %                     set(plotSPD, 'YData', spdChannels*solution);
                 end
