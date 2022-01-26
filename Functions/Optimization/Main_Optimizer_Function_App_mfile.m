@@ -97,7 +97,9 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
         end
         SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
         SpdMixOut.Solution = solution;
-        iterationStop = optimValues.iteration;
+        SpdMixOut.IterationStop = optimValues.iteration;
+        SpdMixOut.SpdPercents0 = spdPercents_0;
+%         iterationStop = optimValues.iteration;
     end
 
 
