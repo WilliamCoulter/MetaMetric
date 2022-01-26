@@ -302,7 +302,6 @@ for i = 1:width(StestIn)
 
 %     SOut(i).rad = 
     
-    % Coulter edit end
 end
 
 end
