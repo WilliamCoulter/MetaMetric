@@ -99,7 +99,7 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
         SpdMixOut.Solution = solution;
         SpdMixOut.IterationStop = optimValues.iteration;
         SpdMixOut.SpdPercents0 = spdPercents_0;
-%         iterationStop = optimValues.iteration;
+        iterationStop = optimValues.iteration;
     end
 
 
