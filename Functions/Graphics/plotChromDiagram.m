@@ -4,7 +4,10 @@ function [xyLocus, BBxyt]=plotChromDiagram(observer, axHandle)
 % the ReadvariableNames False just stops it from reading the headers of the
 % table, which don't matter if we immediately are converting to an array. 
 % https://www.mathworks.com/matlabcentral/answers/360431-how-to-avoid-variable-name-warnings-when-using-filenames-as-variable-names
-cmfs = readtable('MetaMetric\Standards\ISOCIE_11664_1_2019\ISOCIE_11664_1_2019_2deg10deg.xlsx','ReadVariableNames',false) ;
+% cmfs = readtable('MetaMetric\Standards\ISOCIE_11664_1_2019\ISOCIE_11664_1_2019_2deg10deg.xlsx','ReadVariableNames',false) ;
+fileName = 'ISOCIE_11664_1_2019_2deg10deg.xlsx';
+filePath = which(fileName);
+cmfs = readtable(filePath, 'ReadVariableNames',false);
 cmfs = table2array(cmfs);
 cmfs = cmfs(cmfs(:,1) >=380 & cmfs(:,1) <=780,:);
 
