@@ -68,7 +68,10 @@ end
     end
 
     if isempty(A_Planck)
-        load("Functions/TM30_20/Table_Planck.mat");
+        fileName = 'Table_Planck.mat';
+        filePath = which(fileName);
+%         load("Functions/TM30_20/Table_Planck.mat");
+        load(filePath);
         disp('Loaded Table Planck')
         A_Planck = Table_Planck;
         A_Planck(:,5) = 1:height(A_Planck);
