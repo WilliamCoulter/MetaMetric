@@ -278,7 +278,7 @@ for i = 1:width(StestIn)
     SOut(i).wl      = wavelength;
     SOut(i).sref    = Sref;
     SOut(i).stest   = Stest;
-    SOut(i).stest0  = SOut;
+%     SOut(i).stest0  = SOut;
 
     SOut(i).t2XYZ   = Stest'*[xbar,ybar,zbar];
     SOut(i).t2xy    = SOut(i).t2XYZ(1:2)./sum(SOut(i).t2XYZ);
@@ -303,7 +303,9 @@ for i = 1:width(StestIn)
     SOut(i).gref = ref.Bins.Jabz(:,2:3);
     SOut(i).gtest = test.Bins.Jabz(:,2:3);
 
-%     SOut(i).rad = 
+    SOut(i).radWatts = trapz(SOut(i).wl, SOut(i).stest);
+    SOut(i).ler2  = SOut(i).t2XYZ(2)./SOut(i).radWatts;
+    SOut(i).ler10 = SOut(i).t10XYZ(2)./SOut(i).radWatts;
     
 end
 
