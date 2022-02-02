@@ -30,10 +30,10 @@ if isstruct(SpdIn) == 1 %
     %it is a sructure, so we want to go through this code and add the
     %fields at the end to the input.
     SOut = SpdIn;
-    spd = SpdIn.s; %reassing and just get the spectrum, which is what the code expects. so it uses SpdIn, rewritten if it is struct
+    spd = SpdIn.stest; %reassing and just get the spectrum, which is what the code expects. so it uses SpdIn, rewritten if it is struct
 elseif ~isstruct(SpdIn)
     spd = SpdIn;
-    SOut.s = SpdIn;
+    SOut.stest = SpdIn;
 end
 %% Set Constants
 K_m = 683.002; %lm/Watt
@@ -132,6 +132,6 @@ SOut.lOpicDER   = smlmelrOpicELR(3) / K_D65_smlmelr(3);
 SOut.melOpicDER = smlmelrOpicELR(4) / K_D65_smlmelr(4);
 SOut.rOpicDER   = smlmelrOpicELR(5) / K_D65_smlmelr(5);
 % 
-SOut.ELR2 = luminous_flux/trapz( (380:wlInt:780), spd);
+% SOut.ELR2 = luminous_flux/trapz( (380:wlInt:780), spd);
 
 end
