@@ -4,19 +4,19 @@
 % 1) user spds are at 100%, so we divide by 100 to get spd/percent. Then
 % we can multiply by 50 or 100 to get the real percent values.
 % Reset everything
-function [SpdMixOut,myOptimOptions,iterationStop] = Main_Optimizer_Function_App_mfile(spdPercents_0,spdChannels,  uit_constraints, myUiFun,appStopFlag)
+function [SpdMixOut,myOptimOptions,iterationStop] = Main_Optimizer_Function_App_mfile(spdPercents_0,spdChannels, myUITableConstraints,myUiFun)
 
 %% *Setup Output function*
 % https://www.mathworks.com/help/optim/ug/passing-extra-parameters.html
 % https://www.mathworks.com/help/optim/ug/output-function-problem-based.html#UseAnOutputFunctionForProblemBasedOptimizationExample-3
-myOutFun = @(solution,optimValues,state)myOutFunPassed(solution,optimValues,state,spdChannels,appStopFlag);
+myOutFun = @(solution,optimValues,state)myOutFunPassed(solution,optimValues,state,spdChannels);
 
 %% Optimizer Output
 % Pass fixed parameters to objfun
 objfun = @(spdPercents)myObjFun(spdPercents,spdChannels,myUiFun);
 
 % Pass fixed parameters to confun
-confun = @(spdPercents)myFunConstraint(spdPercents,spdChannels,uit_constraints);
+confun = @(spdPercents)myFunConstraint(spdPercents,spdChannels,myUITableConstraints);
 
 %% Set optimization options
 options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
@@ -42,18 +42,18 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
     end
 %% Constraint Function
 
-    function [c,ceq] = myFunConstraint(spdPercents, spdChannels,uit_constraints) % pg 1-39 of their optimization documentation pdf
+    function [c,ceq] = myFunConstraint(spdPercents, spdChannels,myUITableConstraints) % pg 1-39 of their optimization documentation pdf
 
         c = []; ceq = [];
 
         SpdMix = channelPercentsToSPDStruct(spdChannels,spdPercents);
 
-        [c,ceq] = uit_constraintsToConstraintVectors(SpdMix, uit_constraints, c, ceq);
+        [c,ceq] = uit_constraintsToConstraintVectors(SpdMix, c, ceq,myUITableConstraints);
 
     end
 
 %% Output Function
-    function stop = myOutFunPassed(solution,optimValues,state,spdChannels,appStopFlag)
+    function stop = myOutFunPassed(solution,optimValues,state,spdChannels)
         %https://www.mathworks.com/help/optim/ug/output-functions.html
         %https://www.mathworks.com/help/optim/ug/output-function-problem-based.html
 %         app.OptimizationRunStopTF_Prop
