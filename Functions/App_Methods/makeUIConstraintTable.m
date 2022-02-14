@@ -1,4 +1,4 @@
-function makeUIConstraintTable(app)
+function [MetricsEvaluated]= makeUIConstraintTable(app)
 
 %% Replicate metric generation done in optimziation function
 dummyStruct = spdToTM30(ones(401,1)); %just used to get fields
@@ -11,18 +11,18 @@ dummyStruct = spdToAlphaOpics(dummyStruct);
 dummyStruct = shuffleStructFields(dummyStruct,51);
 dummyStruct = shuffleStructFields(dummyStruct,19);
 %% Get the fieldnames, which are the metrics. These are stored in app properties
-app.MetricsEvaluated = fieldnames(dummyStruct);
+MetricsEvaluated = fieldnames(dummyStruct);
 %% Create columns based on the number of elements
 % Set default constraints to none being used
-UseTF         = false( numel(app.MetricsEvaluated),1);
-LessThanTF    = false(numel(app.MetricsEvaluated),1);
-EqualToTF     = true(numel(app.MetricsEvaluated),1); %default
-GreaterThanTF = false(numel(app.MetricsEvaluated),1 );
+UseTF         = false( numel(MetricsEvaluated),1);
+LessThanTF    = false(numel(MetricsEvaluated),1);
+EqualToTF     = true(numel(MetricsEvaluated),1); %default
+GreaterThanTF = false(numel(MetricsEvaluated),1 );
 
 % Min > -inf, max < +inf, and equal is default to 0.
-LessThanVal    = 1*inf*ones( numel(app.MetricsEvaluated), 1);
-EqualToVal     = zeros(numel(app.MetricsEvaluated),1);
-GreaterThanVal = -1*inf*ones( numel(app.MetricsEvaluated),1);
+LessThanVal    = 1*inf*ones( numel(MetricsEvaluated), 1);
+EqualToVal     = zeros(numel(MetricsEvaluated),1);
+GreaterThanVal = -1*inf*ones( numel(MetricsEvaluated),1);
 
 %% Create a standard table
 % use comma-separated variables as variablenames
@@ -31,7 +31,7 @@ myConstraintTableNames = ["Metric.","Use This Metric At All?",...
     "Use = Constraint?", "Equal to what?",...
     "Use > Constraint?", "Greater than what?"];
 
-constraints_Table = table(app.MetricsEvaluated, UseTF,...
+constraints_Table = table(MetricsEvaluated, UseTF,...
     LessThanTF,LessThanVal,...
     EqualToTF, EqualToVal,...
     GreaterThanTF,GreaterThanVal,...
