@@ -4,6 +4,10 @@ function [SOut] = spdToTM30(StestIn)
 %% and an array of CMFs
 %% arrayCMFs should have [wavelength, x2,y2,z2, x10,y10,z10] in 380 to 780 in 1 nm increments
 %%
+arguments
+    StestIn (1,1) {isstruct}
+end
+
 persistent A_CMF_Inside RxArray A_TCS_Inside A_DSeries_Inside A_Planck
 % disp(width(StestIn))
 %%Explanation of changes from original
