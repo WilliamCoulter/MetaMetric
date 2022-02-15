@@ -8,7 +8,7 @@ cellSelection = app.UITable_ImportedFile.Selection;
 uniqueRow = unique(cellSelection(:,1) ); %note that unique automatically sorts in ascending order
 uniqueCol = unique(cellSelection(:,2) );
 % Assign property
-app.ChannelsColNumSelected = uniqueCol;
+app.ImportTableColNumSelected = uniqueCol;
 
 subTableSelected = app.UITable_ImportedFile.Data(uniqueRow,uniqueCol); %selected set of SPDs
 subTableArray = table2array( subTableSelected ); %my functiosn expect arrays
