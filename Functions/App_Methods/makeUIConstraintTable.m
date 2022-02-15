@@ -10,6 +10,9 @@ dummyStruct = spdToAlphaOpics(dummyStruct);
 % run significantly more slowly.
 dummyStruct = shuffleStructFields(dummyStruct,51);
 dummyStruct = shuffleStructFields(dummyStruct,19);
+%%
+[dummyStruct] = removeNonScalarFields(dummyStruct);
+
 %% Get the fieldnames, which are the metrics. These are stored in app properties
 MetricsEvaluated = fieldnames(dummyStruct);
 %% Create columns based on the number of elements
