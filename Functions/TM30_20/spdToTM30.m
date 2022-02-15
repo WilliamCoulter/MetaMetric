@@ -20,17 +20,8 @@ persistent A_CMF_Inside RxArray A_TCS_Inside A_DSeries_Inside A_Planck
 % 1) Update CCT calculation
 % 2)
 %%
-% SOut = StestIn; %keep original input
-for i = 1:width(StestIn)
-    if isstruct(StestIn)
-        %Pull out the double for this function
-        Stest = StestIn(i).s; % no index so the code is flexible. rewritten each time
-    else  %if not structure, test is iteslf
-        Stest = StestIn(:,i); %if array, pull the column
-    end
-end
+Stest = StestIn.s; % no index so the code is flexible. rewritten each time
 %%move on with Stest as the metric to run
-
 %% determine wl itnerval from iput stest
 if length(Stest)==81
     wlInt = 5;
@@ -46,7 +37,6 @@ if isempty(A_CMF_Inside) || isempty(RxArray) || isempty(A_TCS_Inside) || isempty
     load('Standards\TM-30-18_tools_etc\TM30_V204_Arrays.mat');
     disp('Loading TM30 V2.04 Data')
     A_CMF_Inside = A_CMF;
-    %         A_CES_Inside = A_CES;
     RxArray = A_CES(1:wlInt:end,2:end);
 
     A_TCS_Inside = A_TCS;
@@ -85,14 +75,9 @@ S_2 = S_2(1:wlInt:end);
 Stest=Stest*(100/sum(Stest.*ybar_10));
 %% generate the reference illuminant
 % calculate test SPD CCT and Duv (Tt) according to Ohno CCT Duv Leukos
-% CCT_Duv_Coulter_Edit;
-% disp([xbar,ybar,zbar])
 [T_t, Duv_test] = spdToCCTDuv(Stest, [xbar,ybar,zbar],A_Planck ); %2deg cmf for cct calculation
-% disp(T_t)
 
 %% Generate reference spectrum based on the CCT of the test source
-% T_t=T_x;
-% disp(which(wavelength))
 if T_t <= 4000
     % Planckian radiation constants
     c2=0.014388;
@@ -173,14 +158,11 @@ else
     Sref=Sref*(100/sum(Sref.*ybar_10));
 end
 %%
-% RxArray = A_CES_Inside(1:wlInt:end,2:end);
 cmf10 = [xbar_10, ybar_10, zbar_10];
 [JUCS_test, aUCS_test, bUCS_test,~] = CIECAM02UCS(Stest,RxArray,cmf10);
 [JUCS_ref, aUCS_ref, bUCS_ref, h_angle_ref] = CIECAM02UCS(Sref,RxArray,cmf10);
 
 deltaE_CAM02 = sqrt((JUCS_test-JUCS_ref).^2+(aUCS_test-aUCS_ref).^2+(bUCS_test-bUCS_ref).^2);
-
-
 %% Define hue bins
 % code credit to Tucker Downs
 % Rename my variables to fit Tucker Downs
@@ -225,70 +207,70 @@ fullData.Bins.Rhs = ...
     (test.Bins.Jabz(:,3) - ref.Bins.Jabz(:,3)) ./ denom .* cosd(hueBins' - 11.25);
 
 %%
-for i = 1:width(StestIn)
+% for i = 1:width(StestIn)
 
     binArgs(:,1) = reshape([ [ cellstr( "rfBin" + (1:numel(fullData.Bins.Rf(:)') )) ]; [num2cell(fullData.Bins.Rf(:)')] ] , [], 1);
     binArgs(:,2) = reshape([ [ cellstr( "csBin" + (1:numel(fullData.Bins.Rcs(:)') )) ]; [num2cell(fullData.Bins.Rcs(:)')] ] , [], 1);
     binArgs(:,3) = reshape([ [ cellstr( "hsBin" + (1:numel(fullData.Bins.Rhs(:)') )) ]; [num2cell(fullData.Bins.Rhs(:)')] ] , [], 1);
-    SOut(i) = struct(binArgs{:});
+    SOut = struct(binArgs{:});
 
-    SOut(i).hsBins = fullData.Bins.Rhs;
-    SOut(i).csBins = fullData.Bins.Rcs;
-    SOut(i).rfBins = fullData.Bins.Rf;
+    SOut.hsBins = fullData.Bins.Rhs;
+    SOut.csBins = fullData.Bins.Rcs;
+    SOut.rfBins = fullData.Bins.Rf;
 
-    SOut(i).wl      = wavelength;
-    SOut(i).sref    = Sref;
-    SOut(i).stest   = Stest;
-    %     SOut(i).stest0  = SOut;
+    SOut.wl      = wavelength;
+    SOut.sref    = Sref;
+    SOut.stest   = Stest;
+    %     SOut.stest0  = SOut;
 
-    %     SOut(i).t2XYZ   = Stest'*[xbar,ybar,zbar];
+    %     SOut.t2XYZ   = Stest'*[xbar,ybar,zbar];
     t2XYZ   = Stest'*[xbar,ybar,zbar];
-    SOut(i).test2degX    = t2XYZ(1);
-    SOut(i).test2degY   = t2XYZ(2);
-    SOut(i).test2degZ  = t2XYZ(3);
+    SOut.test2degX    = t2XYZ(1);
+    SOut.test2degY   = t2XYZ(2);
+    SOut.test2degZ  = t2XYZ(3);
 
 
-    %     SOut(i).t2xy    = SOut(i).t2XYZ(1:2)./sum(SOut(i).t2XYZ);
+    %     SOut.t2xy    = SOut.t2XYZ(1:2)./sum(SOut.t2XYZ);
     t2xy    = t2XYZ(1:2)./sum(t2XYZ);
-    SOut(i).test2degx = t2xy(1);
-    SOut(i).test2degy = t2xy(2);
+    SOut.test2degx = t2xy(1);
+    SOut.test2degy = t2xy(2);
 
 
-    %     SOut(i).t10XYZ  = Stest'*[xbar_10, ybar_10, zbar_10];
+    %     SOut.t10XYZ  = Stest'*[xbar_10, ybar_10, zbar_10];
     t10XYZ = Stest'*[xbar_10, ybar_10, zbar_10];
-    SOut(i).test10degX = t10XYZ(1);
-    SOut(i).test10degY = t10XYZ(2);
-    SOut(i).test10degZ = t10XYZ(3);
+    SOut.test10degX = t10XYZ(1);
+    SOut.test10degY = t10XYZ(2);
+    SOut.test10degZ = t10XYZ(3);
 
-    %     SOut(i).t10xy    = SOut(i).t10XYZ(1:2)./sum(SOut(i).t10XYZ);
+    %     SOut.t10xy    = SOut.t10XYZ(1:2)./sum(SOut.t10XYZ);
     t10xy    = t10XYZ(1:2)./sum(t10XYZ);
-    SOut(i).test10degx = t10xy(1);
-    SOut(i).test10degy = t10xy(2);
+    SOut.test10degx = t10xy(1);
+    SOut.test10degy = t10xy(2);
 
 
-    %     SOut(i).r2XYZ   = Sref'*[xbar,ybar,zbar];
+    %     SOut.r2XYZ   = Sref'*[xbar,ybar,zbar];
     r2XYZ = Sref'*[xbar,ybar,zbar];
-    SOut(i).ref2X = r2XYZ(1);
-    SOut(i).ref2Y = r2XYZ(2);
-    SOut(i).ref2Z = r2XYZ(3);
+    SOut.ref2X = r2XYZ(1);
+    SOut.ref2Y = r2XYZ(2);
+    SOut.ref2Z = r2XYZ(3);
 
-    %     SOut(i).r10XYZ  = Sref'*[xbar_10,ybar_10,zbar_10];
+    %     SOut.r10XYZ  = Sref'*[xbar_10,ybar_10,zbar_10];
     r10XYZ  = Sref'*[xbar_10,ybar_10,zbar_10];
-    SOut(i).ref10X = r10XYZ(1);
-    SOut(i).ref10Y = r10XYZ(2);
-    SOut(i).ref10Z = r10XYZ(3);
+    SOut.ref10X = r10XYZ(1);
+    SOut.ref10Y = r10XYZ(2);
+    SOut.ref10Z = r10XYZ(3);
 
-    SOut(i).cct     = T_t;
-    SOut(i).duv     = Duv_test;
-    %             Rf_hbin(i) = 10*log(exp(Rf_h_temp/10)+1);
+    SOut.cct     = T_t;
+    SOut.duv     = Duv_test;
+    %             Rf_hbin = 10*log(exp(Rf_h_temp/10)+1);
 
-    SOut(i).rf = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
-    SOut(i).rg = fullData.Rg;
+    SOut.rf = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
+    SOut.rg = fullData.Rg;
 
 
-    %     SOut(i).hsBins = fullData.Bins.Rhs;
-    %     SOut(i).csBins = fullData.Bins.Rcs;
-    %     SOut(i).rfBins = fullData.Bins.Rf;
+    %     SOut.hsBins = fullData.Bins.Rhs;
+    %     SOut.csBins = fullData.Bins.Rcs;
+    %     SOut.rfBins = fullData.Bins.Rf;
     %
     % %     binArgs(:,1) = reshape( [ []])
     %     binArgs(:,1) = reshape([ [ cellstr( "rfBin" + (1:numel(fullData.Bins.Rf) )) ]; [num2cell(fullData.Bins.Rf)] ] , [], 1);
@@ -299,15 +281,15 @@ for i = 1:width(StestIn)
     %     binFields = "hsBins" + string(1:numel(hsBins))
 
 
-    SOut(i).gref = ref.Bins.Jabz(:,2:3);
-    SOut(i).gtest = test.Bins.Jabz(:,2:3);
+    SOut.gref = ref.Bins.Jabz(:,2:3);
+    SOut.gtest = test.Bins.Jabz(:,2:3);
 
-    SOut(i).radWatts = trapz(SOut(i).wl, SOut(i).stest);
-    SOut(i).ler2  = SOut(i).test2degY./SOut(i).radWatts;
-    SOut(i).ler10 = SOut(i).test10degY./SOut(i).radWatts;
+    SOut.radWatts = trapz(SOut.wl, SOut.stest);
+    SOut.ler2  = SOut.test2degY./SOut.radWatts;
+    SOut.ler10 = SOut.test10degY./SOut.radWatts;
 
 
     %     SOout = orderfields(SOut, [49:end, 1:48])
-end
+% end
 
 end
