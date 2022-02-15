@@ -13,8 +13,6 @@ app.UITable_ChannelSelection.RowName = [];
 % different length, so we need to use strings instead. This is
 % not a big deal since we do not need to use this data in the
 % program, only display it.
-%             app.ChannelsColNumSelected
-%             size(app.userSPDLibrary)
 
 for nChannel = 1: width(app.userSPDLibrary)
     [~,chPkLocs_temp,chPkFwhm_temp] =...
@@ -35,7 +33,7 @@ for nChannel = 1:width(app.userSPDLibrary)
     clear chCentroid_temp
 end
 channelMetricNames = ["Peak";"FWHM";"Centroid"];
-channelNames = app.UITable_ImportedFile.ColumnName(app.ChannelsColNumSelected);
+channelNames = app.UITable_ImportedFile.ColumnName(app.channelSelectedTF);
 tMetrics = cell2table([chPkLocs,chPkFwhm,chCentroid] ,...
     RowNames = channelNames,...
     VariableNames= channelMetricNames);
