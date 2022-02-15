@@ -5,7 +5,7 @@ function [SpdMixStruct] = channelPercentsToSPDStruct(spdChannels,spdPercents)
         
     % Note that spdMix is not capitalized while SpdMixStruct is. This is in
     % keeping with the standard that only structures are capitalized.
-    spdMix         = spdChannels*spdPercents;
+    spdMix.s         = spdChannels*spdPercents;
     %% Metrics From the SPD
         %function take in 2 double arrays and makes the spdMix as a double
         %array. The TM30 function converts it to a structure, adding new
