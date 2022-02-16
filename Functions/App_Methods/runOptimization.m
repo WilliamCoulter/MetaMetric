@@ -33,6 +33,6 @@ function [SpdMixOut, myOptimOptions,iterationStop,myUiFun] = runOptimization(app
 appStopFlag = false;
 [SpdMixOut, myOptimOptions,iterationStop] = Main_Optimizer_Function_App_mfile(app.InitialGuessChannelPercents_Prop,...
     app.userSPDLibrary(:,app.channelSelectedTF),...
-    app.myUiCon,myUiFun);
+    app.myUiCon,app.myUiFun);
 end
 
