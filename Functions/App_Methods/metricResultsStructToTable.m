@@ -4,7 +4,7 @@ function metricResultsStructToTable(app)
 % trim structure to get metrics in a column
 % I practiced this in "practiceSaveResultsToFile.mlx"
 % List out which metrics to delete.
-metricDeleteList = {'sref','stest','rfBins','hsBins','csBins',...
+metricDeleteList = {'sref','stest','s','rfBins','hsBins','csBins',...
     'gref','gtest','SpdPercents0','Solution','wl'};
 % Create scalar struct (size 1) that will be output to file by
 % deleting fields listed above
