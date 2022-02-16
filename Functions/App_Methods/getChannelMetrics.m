@@ -33,7 +33,7 @@ for nChannel = 1:width(app.userSPDLibrary)
     clear chCentroid_temp
 end
 channelMetricNames = ["Peak";"FWHM";"Centroid"];
-channelNames = app.UITable_ImportedFile.ColumnName(app.channelSelectedTF);
+channelNames = app.UITable_ImportedFile.ColumnName(app.ImportTableColNumSelected);
 tMetrics = cell2table([chPkLocs,chPkFwhm,chCentroid] ,...
     RowNames = channelNames,...
     VariableNames= channelMetricNames);

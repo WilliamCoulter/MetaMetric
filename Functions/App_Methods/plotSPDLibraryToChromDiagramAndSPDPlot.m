@@ -1,5 +1,10 @@
 function plotSPDLibraryToChromDiagramAndSPDPlot(app)
 %PLOTSPDLIBRARYTOCHROMDIAGRAMANDSPDPLOT Summary of this function goes here
+% hold(app.UIAxes_ChromDiagram,'off'); %clear old
+hold(app.UIAxes_ChromDiagram,'on'); %hold on 
+plotChromDiagram(2,app.UIAxes_ChromDiagram); %add a 2 deg chrom diagram to the axis handle
+
+pbaspect(app.UIAxes_ChromDiagram,[1 1 1]);
 %% Plot all xy to chrom diagram
 scatter(app.UIAxes_ChromDiagram,...
     app.xyuserSPDLibrary(:,1),...

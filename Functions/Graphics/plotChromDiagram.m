@@ -10,7 +10,7 @@ filePath = which(fileName);
 cmfs = readtable(filePath, 'ReadVariableNames',false);
 cmfs = table2array(cmfs);
 cmfs = cmfs(cmfs(:,1) >=380 & cmfs(:,1) <=780,:);
-
+% hold(axHandle,'on');
 % figHandle = figure;
 switch observer
     case 2  
