@@ -1,4 +1,4 @@
-function [SpdMixOut, myOptimOptions,iterationStop,myUiFun] = runOptimization(app)
+function [SpdMixOut, myOptimOptions,iterationStop] = runOptimization(app)
 %% Options and edit fields are called only on this button press
 
 % Get table from uitable
