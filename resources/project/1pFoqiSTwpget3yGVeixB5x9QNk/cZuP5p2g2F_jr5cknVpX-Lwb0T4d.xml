@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <Info>
+    <Category UUID="2c029d16-03e5-48cd-a030-51fd683a2570">
+        <Label UUID="413e9516-c5cb-4660-9897-ec317309f41f" />
+    </Category>
     <Category UUID="53ac74c5-87c2-4f8e-8839-42c70701ea91">
         <Label UUID="fa35bf72-99d5-4161-85ac-5d5841443c66" />
     </Category>
