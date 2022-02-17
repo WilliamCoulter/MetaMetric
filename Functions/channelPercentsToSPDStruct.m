@@ -22,7 +22,7 @@ function [SpdMixStruct] = channelPercentsToSPDStruct(spdChannels,spdPercents)
         
     [SpdMixStruct] = spdToAlphaOpics(SpdMixStruct); %add fields
     %% Future Metrics 1
-    
+%     [SpdMixStruct] = spdToMetamericIndex(SpdMixStruct);
     %SpdMixStruct = FUTUREFUNCTION(SpdMixStruct);
         % % % OR if your function cannot handle a struct:
     %SpdMixStruct = FUTUREFUNCTION(SpdMixStruct.s);
