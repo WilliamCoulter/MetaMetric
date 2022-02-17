@@ -8,7 +8,7 @@ metricDeleteList = {'sref','stest','s','rfBins','hsBins','csBins',...
     'gref','gtest','SpdPercents0','Solution','wl'};
 % Create scalar struct (size 1) that will be output to file by
 % deleting fields listed above
-myStructForTable = rmfield(app.myOptimResults.metrics,metricDeleteList);
+myStructForTable = rmfield(app.myBestOptimResult.metrics,metricDeleteList);
 
 app.metricResultsTable = struct2table(myStructForTable,'AsArray',true);
 app.metricResultsTable = rows2vars(app.metricResultsTable);

@@ -4,7 +4,7 @@
 % 1) user spds are at 100%, so we divide by 100 to get spd/percent. Then
 % we can multiply by 50 or 100 to get the real percent values.
 % Reset everything
-function [SpdMixOut,myOptimOptions,iterationStop] = Main_Optimizer_Function_App_mfile(spdPercents_0,spdChannels, myUiCon,myUiFun)
+function [SpdMixOut,myOptimOptions,iterationStop,objectiveValue, fminconOutput] = Main_Optimizer_Function_App_mfile(spdPercents_0,spdChannels, myUiCon,myUiFun)
 
 %% *Setup Output function*
 % https://www.mathworks.com/help/optim/ug/passing-extra-parameters.html
@@ -26,7 +26,7 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
 %     'EnableFeasibilityMode',true,'SubproblemAlgorithm','cg'); %this line suggested by matlab
 
 %% Run optimize function
-[solution,objectiveValue] = fmincon(objfun,spdPercents_0,[],[],[],[],...
+[solution,objectiveValue,myExitFlag, fminconOutput] = fmincon(objfun,spdPercents_0,[],[],[],[],...
     zeros(size(spdPercents_0)),repmat(100,size(spdPercents_0)),confun,...
     options);
 
@@ -99,6 +99,7 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
         SpdMixOut.Solution = solution;
         SpdMixOut.IterationStop = optimValues.iteration;
         SpdMixOut.SpdPercents0 = spdPercents_0;
+%         SpdMixOut.
         iterationStop = optimValues.iteration;
     end
 

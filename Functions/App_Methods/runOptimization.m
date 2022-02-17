@@ -1,4 +1,4 @@
-function [SpdMixOut, myOptimOptions,iterationStop] = runOptimization(app)
+function [SpdMixOut, myOptimOptions,iterationStop, fVal,optimizerOutput] = runOptimization(app)
 %% Options and edit fields are called only on this button press
 
 % Get table from uitable
@@ -31,7 +31,7 @@ function [SpdMixOut, myOptimOptions,iterationStop] = runOptimization(app)
 %% Run optimizer
 
 appStopFlag = false;
-[SpdMixOut, myOptimOptions,iterationStop] = Main_Optimizer_Function_App_mfile(app.InitialGuessChannelPercents_Prop,...
+[SpdMixOut, myOptimOptions,iterationStop,fVal,optimizerOutput] = Main_Optimizer_Function_App_mfile(app.InitialGuessChannelPercents_Prop,...
     app.userSPDLibrary(:,app.channelSelectedTF),...
     app.myUiCon,app.myUiFun);
 end
