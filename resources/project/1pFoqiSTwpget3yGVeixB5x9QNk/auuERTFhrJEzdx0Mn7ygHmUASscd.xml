@@ -3,6 +3,9 @@
     <Category UUID="2c029d16-03e5-48cd-a030-51fd683a2570">
         <Label UUID="d8cce3bf-bab7-48f1-9a3f-47c8e9c3fdbd" />
     </Category>
+    <Category UUID="53ac74c5-87c2-4f8e-8839-42c70701ea91">
+        <Label UUID="1e94e944-0a3e-4b9c-83a1-f8b0f5584abd" />
+    </Category>
     <Category UUID="FileClassCategory">
         <Label UUID="design" />
     </Category>
