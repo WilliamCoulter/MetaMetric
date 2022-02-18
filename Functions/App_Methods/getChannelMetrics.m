@@ -22,9 +22,9 @@ for nChannel = 1: width(app.userSPDLibrary)
     chPkLocs{nChannel,1}(1,:) = string( round(chPkLocs_temp,1,"decimals") ).join(', ');
     chPkFwhm{nChannel,1}(1,:) = string( round(chPkFwhm_temp,1,"decimals") ).join(', ');
     clear chPkLocs_temp chPkFwhm_temp
-end
+% end
 %% Get wavelength centroid;
-for nChannel = 1:width(app.userSPDLibrary)
+% for nChannel = 1:width(app.userSPDLibrary)
     % https://mathworld.wolfram.com/FunctionCentroid.html
     x = app.wlUserImported;
     y = app.userSPDLibrary(:,nChannel);
@@ -33,7 +33,7 @@ for nChannel = 1:width(app.userSPDLibrary)
     clear chCentroid_temp
 end
 channelMetricNames = ["Peak";"FWHM";"Centroid"];
-channelNames = app.UITable_ImportedFile.ColumnName(app.ImportTableColNumSelected);
+channelNames = app.UITable_ImportedFile.ColumnName(app.ImportTableColNumSelected); %logically index from all selected which are checkbox marked
 tMetrics = cell2table([chPkLocs,chPkFwhm,chCentroid] ,...
     RowNames = channelNames,...
     VariableNames= channelMetricNames);
