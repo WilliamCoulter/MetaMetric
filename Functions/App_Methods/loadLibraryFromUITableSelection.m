@@ -19,28 +19,75 @@ uniqueCol = unique(cellSelection(:,2) );
 app.ImportTableColNumSelected = uniqueCol;
 
 subTableSelected = app.UITable_ImportedFile.Data(uniqueRow,uniqueCol); %selected set of SPDs
-%% Step 2: Create array from the subtable selected
-% This isn't strictly necessary, but I'd rather deal with an array
-subTableArray = table2array( subTableSelected ); 
-
-%% Step 3: Consider user inputs in panel 2 and 3 in tab 1
-
-% Load the min and max wavelength
-minWavelength = app.EditField_ImportedSPDWavelengthMin.Value;
-maxWavelength = app.EditField_ImportedSPDWavelengthMax.Value;
-
-
-app.wlIntUserImported_Prop = (780-380)/(height(subTableArray)-1);
-app.wlUserImported = [380:app.wlIntUserImported_Prop:780]';
-if round( app.wlIntUserImported_Prop) ~= app.wlIntUserImported_Prop
-    msgbox( "When guessing wavelength interval, a non-integer was determined. "+...
-        "Are you sure the wavelengths are from 380 to 780 and that you selected the entire column?", 'Error','error')
-end
+%% Step 2: Ensure the selection is rectangular
 % This Ensure they chose a square selection (not necessarily
 % contiguous).
 if numel(subTableArray) ~= size(cellSelection,1)
     msgbox("Please Ensure each SPD has the same amount of rows selected", 'Error','error');
 end
+
+%% Step 3: Create array from the subtable selected
+% This isn't strictly necessary, but I'd rather deal with an array
+rawSubTableArray = table2array( subTableSelected ); 
+
+%% Step 4: Preprocess imported data
+% For simplicity, the program uses wavelengths of 380:5:780 at all points 
+% Step 4 here will consider if app.CheckBox_IsLeftColumnSelectedWavelength is true
+% If it is true, we need to interpolate and pad to 380:780. If it isn't
+% true, still interpolate.
+% Note that if data is 380:1:780, then interpolation is not doing any math
+% but just pulling out every 5th value. The same is true if it is
+% 360:1:830, except it only pulls out values between 380 to 780.
+
+
+% Consider if the left checkbox is checked. 
+switch app.CheckBox_IsLeftColumnSelectedWavelength
+    case true
+        %subTableArray is spds, so split the array into spds and
+        %wavelengths
+        rawUserWavelength = rawSubTableArray(:,1);%all rows, first column
+        spdChannelArray   = rawSubTableArray(:,2:end); %all rows, all columns but first
+    case false
+        %the subtable is all spds. rename to be consistent with the true case condition
+        spdChannelArray = rawSubTableArray; 
+
+        % create wavelength vector based on height of table and min and max
+        % that the user inputs
+        minWl = app.EditField_ImportedSPDWavelengthMin.Value;
+        maxWl = app.EditField_ImportedSPDWavelengthMax.Value;
+        numEntries = height(spdChannelArray);
+        % Example of logic:
+        % For 2,3,4,5,6 the min is 2 and max is 6. There are 5 entries.
+        % Interval = (max +1 - min) / entries = (7 - 2)/5 = 1
+        wlInterval = (maxWl +1 - minWl)/numEntries; 
+
+        rawUserWavelength = [minWl:wlInterval:maxWl]'; %make column vec
+    otherwise
+        error("Somehow the checkbox for whether the left column " + ...
+            "of uitable is neither checked nor unchecked")
+end
+% We now have the wavelength vector and spds
+%% Step 5: Inteprolate user data to universal 380:5:780 of program.
+% use for loop to make code easier to understand
+% app.wlVecProgram = [380:5:780]'; %this is 380:5:780 and assigned on
+% startup
+extrapVal = 0; %set values that need to be extrapolated to 0
+for spdCol = 1:width(spdChannelArray)
+    subTableArray(:,spdCol) = interp1( rawUserWavelength, spdChannelArray(:,spdCol),...
+        app.wlVecProgram, 'method',app.DropDown_InterpolationType.Value,...
+        'extrap',extrapVal);
+end
+
+
+
+
+%% Make sure that the selected array is rectangular
+% Load the min and max wavelength
+
+% app.wlIntUserImported_Prop = (780-380)/(height(subTableArray)-1);
+% app.wlUserImported = [380:app.wlIntUserImported_Prop:780]';
+
+
 %% Check they are all positive
 if any(subTableArray(:,:)< 0,'all') % check 'all' values to see if any are < 0
     % https://www.mathworks.com/help/matlab/ref/uialert.html
