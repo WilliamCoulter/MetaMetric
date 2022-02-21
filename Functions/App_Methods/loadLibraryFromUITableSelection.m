@@ -1,17 +1,34 @@
 function [subTableArray] = loadLibraryFromUITableSelection(app)
-%LOADLIBRARYFROMUITABLESELECTION Summary of this function goes here
-%% Select SPDs from selection
+%% Description: Load SPD Channels Into Program
+% After the user selects the cells of data in the uitable on tab 1, and
+% specifying the min and max range, read in the subtable from the uitable
+% and interpolate / pad / trim the data into the program's universal
+% 380:5:780 nm range
+
+%% Step 1: Create numeric array of spds from the subtable selected in uitable
+
 % the .Selection queries the highlighted cells and returns an
 % n x 2 array of indices: [rows, cols]. Use this to create a
 % subtable and then convert that to an array
 cellSelection = app.UITable_ImportedFile.Selection;
+
 uniqueRow = unique(cellSelection(:,1) ); %note that unique automatically sorts in ascending order
 uniqueCol = unique(cellSelection(:,2) );
-% Assign property
+
+% Assign property to use in later functions
 app.ImportTableColNumSelected = uniqueCol;
 
 subTableSelected = app.UITable_ImportedFile.Data(uniqueRow,uniqueCol); %selected set of SPDs
-subTableArray = table2array( subTableSelected ); %my functiosn expect arrays
+%% Step 2: Create array from the subtable selected
+% This isn't strictly necessary, but I'd rather deal with an array
+subTableArray = table2array( subTableSelected ); 
+
+%% Step 3: Consider user inputs in panel 2 and 3 in tab 1
+
+% Load the min and max wavelength
+minWavelength = app.EditField_ImportedSPDWavelengthMin.Value;
+maxWavelength = app.EditField_ImportedSPDWavelengthMax.Value;
+
 
 app.wlIntUserImported_Prop = (780-380)/(height(subTableArray)-1);
 app.wlUserImported = [380:app.wlIntUserImported_Prop:780]';
