@@ -7,7 +7,7 @@ catch
 end
 %% Specify wavelength vector the program works with
 app.wlVecProgram = [];
-app.wlVecProgram(:,1) = 380:5:780;
+app.wlVecProgram(:,1) = 380:1:780;
 %%
 hold(app.UIAxes_OptimSPD,'on');
 title(app.UIAxes_OptimSPD, "Most Recent SPD");
