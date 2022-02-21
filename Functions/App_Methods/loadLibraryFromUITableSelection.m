@@ -15,8 +15,7 @@ cellSelection = app.UITable_ImportedFile.Selection;
 uniqueRow = unique(cellSelection(:,1) ); %note that unique automatically sorts in ascending order
 uniqueCol = unique(cellSelection(:,2) );
 
-% Assign property to use in later functions
-app.ImportTableColNumSelected = uniqueCol;
+
 
 subTableSelected = app.UITable_ImportedFile.Data(uniqueRow,uniqueCol); %selected set of SPDs
 
@@ -43,11 +42,19 @@ end
 % Consider if the left checkbox is checked. 
 switch app.CheckBox_IsLeftColumnSelectedWavelength.Value
     case true
+        % Assign property to use in later functions. leftmost is the
+        % minimum of column
+        app.ImportTableColNumSelected = uniqueCol(uniqueCol ~= min(uniqueCol) ); %take all values that aren't minimum
+
         %subTableArray is spds, so split the array into spds and
         %wavelengths
         rawUserWavelength = rawSubTableArray(:,1);%all rows, first column
         spdChannelArray   = rawSubTableArray(:,2:end); %all rows, all columns but first
+
     case false
+        % Assign property to use in later functions. All columns are spds
+        app.ImportTableColNumSelected = uniqueCol;
+
         %the subtable is all spds. rename to be consistent with the true case condition
         spdChannelArray = rawSubTableArray; 
 
