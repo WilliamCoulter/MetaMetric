@@ -26,7 +26,7 @@ for nChannel = 1: width(app.userSPDLibrary)
 %% Get wavelength centroid;
 % for nChannel = 1:width(app.userSPDLibrary)
     % https://mathworld.wolfram.com/FunctionCentroid.html
-    x = app.wlUserImported;
+    x = app.wlVecProgram;
     y = app.userSPDLibrary(:,nChannel);
     chCentroid_temp =trapz( x,x.*y)./ trapz(x,y);
     chCentroid{nChannel,1}(1,:) = string( round(chCentroid_temp,1,"decimals") ); %not needed, but for consistency

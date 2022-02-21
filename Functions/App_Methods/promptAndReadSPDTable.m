@@ -10,7 +10,7 @@ spdFileFullPath           =  fullfile(spdFolderPath,spdFileName);
 app.importedFileName_Prop = spdFileName;
 %% Import spreadsheet into table.
 
-try sheetnames(spdFileFullPath) %Put in try catch because it will return error if no sheetnames
+try sheetnames(spdFileFullPath); %Put in try catch because it will return error if no sheetnames
     
     fileSheetNames = sheetnames(spdFileFullPath); %since sheetnames can be done, get the file list
     if numel(fileSheetNames) >1 %only ask them to select if there's more than one

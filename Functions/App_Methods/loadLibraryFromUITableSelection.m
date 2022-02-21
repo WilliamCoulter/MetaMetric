@@ -73,11 +73,11 @@ end
 % startup
 extrapVal = 0; %set values that need to be extrapolated to 0
 userMethod = app.DropDown_InterpolationType.Value;
-xInterp = app.wlVecPrograml
+xInterp = app.wlVecProgram;
 for spdCol = 1:width(spdChannelArray)
     subTableArray(:,spdCol) = interp1( rawUserWavelength, spdChannelArray(:,spdCol),...
         xInterp, userMethod,...
-        'extrap',extrapVal);
+        extrapVal); %set value for data outside of xInterp
 end
 
 
