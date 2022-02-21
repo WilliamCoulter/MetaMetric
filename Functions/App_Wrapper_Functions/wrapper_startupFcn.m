@@ -6,7 +6,7 @@ try
 catch
 end
 %% Specify wavelength vector the program works with
-app.wlVecProgram = []
+app.wlVecProgram = [];
 app.wlVecProgram(:,1) = 380:5:780;
 %%
 hold(app.UIAxes_OptimSPD,'on');

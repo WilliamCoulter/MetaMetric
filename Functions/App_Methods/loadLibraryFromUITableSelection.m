@@ -19,17 +19,17 @@ uniqueCol = unique(cellSelection(:,2) );
 app.ImportTableColNumSelected = uniqueCol;
 
 subTableSelected = app.UITable_ImportedFile.Data(uniqueRow,uniqueCol); %selected set of SPDs
-%% Step 2: Ensure the selection is rectangular
-% This Ensure they chose a square selection (not necessarily
-% contiguous).
-if numel(subTableArray) ~= size(cellSelection,1)
-    msgbox("Please Ensure each SPD has the same amount of rows selected", 'Error','error');
-end
 
-%% Step 3: Create array from the subtable selected
+
+%% Step 2: Create array from the subtable selected
 % This isn't strictly necessary, but I'd rather deal with an array
 rawSubTableArray = table2array( subTableSelected ); 
-
+%% Step 3: Ensure the selection is rectangular
+% This Ensure they chose a square selection (not necessarily
+% contiguous).
+if numel(rawSubTableArray) ~= size(cellSelection,1)
+    msgbox("Please Ensure each SPD has the same amount of rows selected", 'Error','error');
+end
 %% Step 4: Preprocess imported data
 % For simplicity, the program uses wavelengths of 380:5:780 at all points 
 % Step 4 here will consider if app.CheckBox_IsLeftColumnSelectedWavelength is true
@@ -41,7 +41,7 @@ rawSubTableArray = table2array( subTableSelected );
 
 
 % Consider if the left checkbox is checked. 
-switch app.CheckBox_IsLeftColumnSelectedWavelength
+switch app.CheckBox_IsLeftColumnSelectedWavelength.Value
     case true
         %subTableArray is spds, so split the array into spds and
         %wavelengths
@@ -72,9 +72,11 @@ end
 % app.wlVecProgram = [380:5:780]'; %this is 380:5:780 and assigned on
 % startup
 extrapVal = 0; %set values that need to be extrapolated to 0
+userMethod = app.DropDown_InterpolationType.Value;
+xInterp = app.wlVecPrograml
 for spdCol = 1:width(spdChannelArray)
     subTableArray(:,spdCol) = interp1( rawUserWavelength, spdChannelArray(:,spdCol),...
-        app.wlVecProgram, 'method',app.DropDown_InterpolationType.Value,...
+        xInterp, userMethod,...
         'extrap',extrapVal);
 end
 

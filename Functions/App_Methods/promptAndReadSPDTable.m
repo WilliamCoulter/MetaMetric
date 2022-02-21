@@ -10,14 +10,21 @@ spdFileFullPath           =  fullfile(spdFolderPath,spdFileName);
 app.importedFileName_Prop = spdFileName;
 %% Import spreadsheet into table.
 
-try sheetnames(spdFileFullPath)
-    fileSheetNames = sheetnames(spdFileFullPath);
-    msg = "Multiple Sheets Detected. Select Sheet With SPDs"; myTitle = "Choose Sheet To Load";
-    sel = uiconfirm(app.UIFigure, msg, myTitle,...
-        Options = cellstr(fileSheetNames) );
-
-    t = readtable(spdFileFullPath,...
-        ReadVariableNames= true, VariableNamingRule= 'preserve', Sheet=sel);
+try sheetnames(spdFileFullPath) %Put in try catch because it will return error if no sheetnames
+    
+    fileSheetNames = sheetnames(spdFileFullPath); %since sheetnames can be done, get the file list
+    if numel(fileSheetNames) >1 %only ask them to select if there's more than one
+        msg = "Multiple Sheets Detected. Select Sheet With SPDs"; myTitle = "Choose Sheet To Load";
+        sel = uiconfirm(app.UIFigure, msg, myTitle,...
+            Options = cellstr(fileSheetNames) );
+        t = readtable(spdFileFullPath,...
+            ReadVariableNames= true, VariableNamingRule= 'preserve', Sheet=sel);
+    elseif numel(fileSheetNames) ==1
+        t = readtable(spdFileFullPath,...
+            ReadVariableNames= true, VariableNamingRule= 'preserve');
+    else
+        error("Somehow there are 0 sheetnames in promptAndReadSPDTable function");
+    end
 catch
     t = readtable(spdFileFullPath,...
         ReadVariableNames= true, VariableNamingRule= 'preserve');
