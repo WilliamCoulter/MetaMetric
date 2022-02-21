@@ -18,6 +18,7 @@ uniqueCol = unique(cellSelection(:,2) );
 
 
 subTableSelected = app.UITable_ImportedFile.Data(uniqueRow,uniqueCol); %selected set of SPDs
+importHeaders =  subTableSelected.Properties.VariableNames;
 
 
 %% Step 2: Create array from the subtable selected
@@ -46,6 +47,7 @@ switch app.CheckBox_IsLeftColumnSelectedWavelength.Value
         % minimum of column
         app.ImportTableColNumSelected = uniqueCol(uniqueCol ~= min(uniqueCol) ); %take all values that aren't minimum
 
+        app.ImportTableHeaders = importHeaders(2:end); %ignore first, since it is wavelength
         %subTableArray is spds, so split the array into spds and
         %wavelengths
         rawUserWavelength = rawSubTableArray(:,1);%all rows, first column
@@ -54,6 +56,7 @@ switch app.CheckBox_IsLeftColumnSelectedWavelength.Value
     case false
         % Assign property to use in later functions. All columns are spds
         app.ImportTableColNumSelected = uniqueCol;
+        app.ImportTableHeaders = importHeaders;
 
         %the subtable is all spds. rename to be consistent with the true case condition
         spdChannelArray = rawSubTableArray; 
@@ -86,8 +89,22 @@ for spdCol = 1:width(spdChannelArray)
         xInterp, userMethod,...
         extrapVal); %set value for data outside of xInterp
 end
+%% Step 6: If over 99% of power is outside of 380-780, notify and set all to 0
 
-
+% for i = 1:width(spdChannelArray)
+%     powInRange(i) = trapz(app.wlVecProgram, subTableArray(:,i) ) %use interpolated value to check inside 380 to 780
+%     powTotal(i)   = trapz(rawUserWavelength, spdChannelArray(:,i))
+% 
+% end
+% idOver99OfPowOutside = powInRange./PowTotal < 0.01
+% if idOver99OfPowOutside >0 %if there is at least one that has too little power
+%     message = ["The following SPD channel column numbers (in order of selection) were set to 0";
+%         "They had over 99% of their power outside the range 380:780nm";
+%         ]
+%     uialert(app.UIFigure, message,'Warning','Icon','warning');
+% 
+% %     uialert('')
+% a
 
 
 %% Make sure that the selected array is rectangular
