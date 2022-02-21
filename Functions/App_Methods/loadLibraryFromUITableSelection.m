@@ -107,7 +107,8 @@ if any(subTableArray(:,:)< 0,'all') % check 'all' values to see if any are < 0
         "This/these value(s) will be set to 0 in the app";...
         "(The file used to import data will not be changed)"];
     uialert(app.UIFigure, message,'Warning','Icon','warning');
-    subTableArray(rowIdx,colIdx) = 0; %set the negative values to 0
+    linInd = sub2ind(size(subTableArray), rowIdx,colIdx);
+    subTableArray(linInd) = 0; %set the negative values to 0
 end
 
 
