@@ -1,4 +1,4 @@
-function [SOut] = spdToTM30(StestIn)
+function [SOutTM30Struct] = spdToTM30(StestIn)
 
 %% ANSI_IES_TM_30_20_Coulter_Edit Help: Takes an spd from 380nm to 780nm in either 1 or 5nm increments (401,1) or (81,1)
 %% and an array of CMFs
@@ -216,88 +216,85 @@ fullData.Bins.Rhs = ...
 % "s" is the actual spd passed in. "stest" is the scaled spd passed in, and
 % "sref" is the referenve spd
 
-%% Split the bin data into 48 fields. 
-% This must be done on struct creation, so we can reorder the field order
-% afterward. This was the motivation for shuffleStructFields function
-% binArgs(:,1) = reshape([ [ cellstr( "rfBin" + (1:numel(fullData.Bins.Rf(:)') )) ]; [num2cell(fullData.Bins.Rf(:)')] ] , [], 1);
-% binArgs(:,2) = reshape([ [ cellstr( "csBin" + (1:numel(fullData.Bins.Rcs(:)') )) ]; [num2cell(fullData.Bins.Rcs(:)')] ] , [], 1);
-% binArgs(:,3) = reshape([ [ cellstr( "hsBin" + (1:numel(fullData.Bins.Rhs(:)') )) ]; [num2cell(fullData.Bins.Rhs(:)')] ] , [], 1);
-% SOut = struct(binArgs{:});
+%% TM30
+%             Rf_hbin = 10*log(exp(Rf_h_temp/10)+1);
+SOutTM30Struct.TM30.rf = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
+SOutTM30Struct.TM30.rg = fullData.Rg;
+
+SOutTM30Struct.TM30.gref = ref.Bins.Jabz(:,2:3);
+SOutTM30Struct.TM30.gtest = test.Bins.Jabz(:,2:3);
+
+SOutTM30Struct.TM30.sref    = Sref;
+SOutTM30Struct.TM30.stest   = Stest;
+
 rfBinArgs(:,1) = reshape([ [ cellstr( "rfBin" + (1:numel(fullData.Bins.Rf(:)') )) ]; [num2cell(fullData.Bins.Rf(:)')] ] , [], 1);
 csBinArgs(:,1) = reshape([ [ cellstr( "csBin" + (1:numel(fullData.Bins.Rcs(:)') )) ]; [num2cell(fullData.Bins.Rcs(:)')] ] , [], 1);
 hsBinArgs(:,1) = reshape([ [ cellstr( "hsBin" + (1:numel(fullData.Bins.Rhs(:)') )) ]; [num2cell(fullData.Bins.Rhs(:)')] ] , [], 1);
 
-SOut.hsBins = struct(hsBinArgs{:});
-SOut.csBins = struct(csBinArgs{:});
-SOut.rfBins = struct(rfBinArgs{:});
+SOutTM30Struct.TM30.hsBins = struct(hsBinArgs{:});
+SOutTM30Struct.TM30.csBins = struct(csBinArgs{:});
+SOutTM30Struct.TM30.rfBins = struct(rfBinArgs{:});
 %% Elementary metrics
 % Use these in derivations below
-SOut.wl      = wavelength; %wavelength vector
+% SOutTM30Struct.wl      = wavelength; %wavelength vector
+% % 
+% SOutTM30Struct.s       = StestIn.s; %use this to get metrics
+%%
 
-SOut.s       = StestIn.s; %use this to get metrics
 %% Trichromatic Metrics
 % 2Deg
-t2XYZ   = SOut.s'*[xbar,ybar,zbar];
+t2XYZ   = StestIn.s'*[xbar,ybar,zbar];
     % SOut.test2degX    = t2XYZ(1);
     % SOut.test2degY    = t2XYZ(2);
     % SOut.test2degZ    = t2XYZ(3);
-SOut.Trichromatic.spd2degX    = t2XYZ(1);
-SOut.Trichromatic.spd2degY    = t2XYZ(2);
-SOut.Trichromatic.spd2degZ    = t2XYZ(3);
+SOutTM30Struct.Trichromatic.spd2degX    = t2XYZ(1);
+SOutTM30Struct.Trichromatic.spd2degY    = t2XYZ(2);
+SOutTM30Struct.Trichromatic.spd2degZ    = t2XYZ(3);
 
 %     SOut.t2xy    = SOut.t2XYZ(1:2)./sum(SOut.t2XYZ);
 t2xy    = t2XYZ(1:2)./sum(t2XYZ);
 % SOut.test2degx = t2xy(1);
 % SOut.test2degy = t2xy(2);
-SOut.Trichromatic.spd2degx = t2xy(1);
-SOut.Trichromatic.spd2degy = t2xy(2);
+SOutTM30Struct.Trichromatic.spd2degx = t2xy(1);
+SOutTM30Struct.Trichromatic.spd2degy = t2xy(2);
 
 % 10 Deg
 %     SOut.t10XYZ  = Stest'*[xbar_10, ybar_10, zbar_10];
-t10XYZ = SOut.s'*[xbar_10, ybar_10, zbar_10];
+t10XYZ = StestIn.s'*[xbar_10, ybar_10, zbar_10];
 % SOut.test10degX = t10XYZ(1);
 % SOut.test10degY = t10XYZ(2);
 % SOut.test10degZ = t10XYZ(3);
-SOut.Trichromatic.spd10degX = t10XYZ(1);
-SOut.Trichromatic.spd10degY = t10XYZ(2);
-SOut.Trichromatic.spd10degZ = t10XYZ(3);
+SOutTM30Struct.Trichromatic.spd10degX = t10XYZ(1);
+SOutTM30Struct.Trichromatic.spd10degY = t10XYZ(2);
+SOutTM30Struct.Trichromatic.spd10degZ = t10XYZ(3);
 
 %     SOut.t10xy    = SOut.t10XYZ(1:2)./sum(SOut.t10XYZ);
 t10xy    = t10XYZ(1:2)./sum(t10XYZ);
 % SOut.test10degx = t10xy(1);
 % SOut.test10degy = t10xy(2);
-SOut.Trichromatic.spd10degx = t10xy(1);
-SOut.Trichromatic.spd10degy = t10xy(2);
+SOutTM30Struct.Trichromatic.spd10degx = t10xy(1);
+SOutTM30Struct.Trichromatic.spd10degy = t10xy(2);
 % XYZ2 and XYZ10 for reference
 %SOut.r2XYZ   = Sref'*[xbar,ybar,zbar];
-r2XYZ = SOut.sref'*[xbar,ybar,zbar];
-SOut.Trichromatic.ref2X = r2XYZ(1);
-SOut.Trichromatic.ref2Y = r2XYZ(2);
-SOut.Trichromatic.ref2Z = r2XYZ(3);
+r2XYZ = SOutTM30Struct.TM30.sref'*[xbar,ybar,zbar];
+SOutTM30Struct.Trichromatic.ref2X = r2XYZ(1);
+SOutTM30Struct.Trichromatic.ref2Y = r2XYZ(2);
+SOutTM30Struct.Trichromatic.ref2Z = r2XYZ(3);
 
 %SOut.r10XYZ  = Sref'*[xbar_10,ybar_10,zbar_10];
-r10XYZ  = SOut.sref'*[xbar_10,ybar_10,zbar_10];
-SOut.Trichromatic.ref10X = r10XYZ(1);
-SOut.Trichromatic.ref10Y = r10XYZ(2);
-SOut.Trichromatic.ref10Z = r10XYZ(3);
+r10XYZ  = SOutTM30Struct.TM30.sref'*[xbar_10,ybar_10,zbar_10];
+SOutTM30Struct.Trichromatic.ref10X = r10XYZ(1);
+SOutTM30Struct.Trichromatic.ref10Y = r10XYZ(2);
+SOutTM30Struct.Trichromatic.ref10Z = r10XYZ(3);
 
-SOut.Trichromatic.cct     = T_t;
-SOut.Trichromatic.duv     = Duv_test;
-%% Fidelity
-%             Rf_hbin = 10*log(exp(Rf_h_temp/10)+1);
-SOut.TM30.rf = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
-SOut.TM30.rg = fullData.Rg;
+SOutTM30Struct.Trichromatic.cct     = T_t;
+SOutTM30Struct.Trichromatic.duv     = Duv_test;
 
-SOut.TM30.gref = ref.Bins.Jabz(:,2:3);
-SOut.TM30.gtest = test.Bins.Jabz(:,2:3);
-
-SOut.TM30.sref    = Sref;
-SOut.TM30.stest   = Stest;
 %Power
 
-SOut.Power.radWatts = trapz(SOut.wl, SOut.s);
-SOut.Power.ler2  = SOut.Trichromatic.spd2degY./SOut.Power.radWatts;
-SOut.Power.ler10 = SOut.Trichromatic.spd10degY./SOut.Power.radWatts;
+SOutTM30Struct.Power.radWatts = trapz(wavelength, StestIn.s);
+SOutTM30Struct.Power.ler2  = SOutTM30Struct.Trichromatic.spd2degY./SOutTM30Struct.Power.radWatts;
+SOutTM30Struct.Power.ler10 = SOutTM30Struct.Trichromatic.spd10degY./SOutTM30Struct.Power.radWatts;
 
 
 end
