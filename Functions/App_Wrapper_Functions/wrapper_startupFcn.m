@@ -1,5 +1,10 @@
 function wrapper_startupFcn(app)
-%% debug
+%% This is called at startup.
+% Roles
+% 1) Setup initial display of axes and plots, like their limits
+% 2) Assign default values to parameters like the wavelength we interpolate
+% to
+% 3) Generate UIConstraint Table
 %% Load previous session's output folder
 try
     app.loadMyDefaults;
