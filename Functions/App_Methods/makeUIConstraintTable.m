@@ -1,9 +1,7 @@
 function [MetricsEvaluated]= makeUIConstraintTable(app)
 
 %% Replicate metric generation done in optimziation function
-dummyStruct.s = ones(401,1);
-dummyStruct = spdToTM30(dummyStruct); %just used to get fields
-dummyStruct = spdToAlphaOpics(dummyStruct);
+dummyStruct = channelPercentsToSPDStruct(ones(401,1));
 %% Clumsily shuffle the bin fields to the end
 % The 48 bin fields are assigned programmatically using a
 % clever trick, but it can only be done to create a structure,
