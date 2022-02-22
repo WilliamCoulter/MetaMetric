@@ -25,32 +25,39 @@ function [SOut] = spdToAlphaOpics( SpdIn)
 % Opic Radiant Flux / Luminous Flux]
 
 % SOut.s = SpdIn; %keep original input as SpdOut. No matter what, we attach the fields of this function to SpdOut
-%% Deal with possible (preferred) structure input
-if isstruct(SpdIn) == 1 %
-    %it is a sructure, so we want to go through this code and add the
-    %fields at the end to the input.
-    SOut = SpdIn;
-    spd = SpdIn.stest; %reassing and just get the spectrum, which is what the code expects. so it uses SpdIn, rewritten if it is struct
-elseif ~isstruct(SpdIn)
-    spd = SpdIn;
-    SOut.stest = SpdIn;
+
+
+arguments
+    SpdIn (1,1) {isstruct}
 end
+%% Deal with possible (preferred) structure input
+% if isstruct(SpdIn) == 1 %
+%     %it is a sructure, so we want to go through this code and add the
+%     %fields at the end to the input.
+%     SOut = SpdIn;
+%     spd = SpdIn.stest; %reassing and just get the spectrum, which is what the code expects. so it uses SpdIn, rewritten if it is struct
+% elseif ~isstruct(SpdIn)
+%     spd = SpdIn;
+%     SOut.stest = SpdIn;
+% end
+% spd = SpdIn.s;
 %% Set Constants
 K_m = 683.002; %lm/Watt
 unitScale = 1000; %default output is watts. Multiply by 1000 to get mW/lm
 
 %%
 % spd(:,1) = SpdIn; %ensure column vec
-
-if length(spd) ==401
+% 
+if length(SpdIn.s) ==401
     wlInt =1;
-elseif length(spd) ==81
+elseif length(SpdIn.s) ==81
     wlInt = 5;
-elseif length(spd) == 201
+elseif length(SpdIn.s) == 201
     wlInt = 2;
 else
     error("wavelength interval is inocorrect")
 end
+% wlInt = 
 %% Load Data
 persistent T_Alpha_Opic_Radiometric
 if isempty(T_Alpha_Opic_Radiometric)
@@ -97,10 +104,10 @@ smlmelrOpic = smlmelrOpicLoad(1:wlInt:end,:);
 % sense for each row to be a variable
 %therefore, it is s' *opics
 % alpha_opic_radiant_flux = spd'*[sOpic, mOpic, lOpic, melOpic, rOpic];
-alpha_opic_radiant_flux = spd'*[smlmelrOpic];
+alpha_opic_radiant_flux = SpdIn.s'*[smlmelrOpic];
 
 % the luminous flux is the same for each opic calculation
-luminous_flux           = K_m*spd'*vLambda;
+luminous_flux           = K_m*SpdIn.s'*vLambda;
 
 % SOut.sOpicELR   = unitScale*(alpha_opic_radiant_flux(1) / luminous_flux);
 % SOut.mOpicELR   = unitScale*(alpha_opic_radiant_flux(2) / luminous_flux);

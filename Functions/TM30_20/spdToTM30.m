@@ -219,19 +219,21 @@ fullData.Bins.Rhs = ...
 %% Split the bin data into 48 fields. 
 % This must be done on struct creation, so we can reorder the field order
 % afterward. This was the motivation for shuffleStructFields function
-binArgs(:,1) = reshape([ [ cellstr( "rfBin" + (1:numel(fullData.Bins.Rf(:)') )) ]; [num2cell(fullData.Bins.Rf(:)')] ] , [], 1);
-binArgs(:,2) = reshape([ [ cellstr( "csBin" + (1:numel(fullData.Bins.Rcs(:)') )) ]; [num2cell(fullData.Bins.Rcs(:)')] ] , [], 1);
-binArgs(:,3) = reshape([ [ cellstr( "hsBin" + (1:numel(fullData.Bins.Rhs(:)') )) ]; [num2cell(fullData.Bins.Rhs(:)')] ] , [], 1);
-SOut = struct(binArgs{:});
+% binArgs(:,1) = reshape([ [ cellstr( "rfBin" + (1:numel(fullData.Bins.Rf(:)') )) ]; [num2cell(fullData.Bins.Rf(:)')] ] , [], 1);
+% binArgs(:,2) = reshape([ [ cellstr( "csBin" + (1:numel(fullData.Bins.Rcs(:)') )) ]; [num2cell(fullData.Bins.Rcs(:)')] ] , [], 1);
+% binArgs(:,3) = reshape([ [ cellstr( "hsBin" + (1:numel(fullData.Bins.Rhs(:)') )) ]; [num2cell(fullData.Bins.Rhs(:)')] ] , [], 1);
+% SOut = struct(binArgs{:});
+rfBinArgs(:,1) = reshape([ [ cellstr( "rfBin" + (1:numel(fullData.Bins.Rf(:)') )) ]; [num2cell(fullData.Bins.Rf(:)')] ] , [], 1);
+csBinArgs(:,1) = reshape([ [ cellstr( "csBin" + (1:numel(fullData.Bins.Rcs(:)') )) ]; [num2cell(fullData.Bins.Rcs(:)')] ] , [], 1);
+hsBinArgs(:,1) = reshape([ [ cellstr( "hsBin" + (1:numel(fullData.Bins.Rhs(:)') )) ]; [num2cell(fullData.Bins.Rhs(:)')] ] , [], 1);
 
-SOut.hsBins = fullData.Bins.Rhs;
-SOut.csBins = fullData.Bins.Rcs;
-SOut.rfBins = fullData.Bins.Rf;
+SOut.hsBins = struct(hsBinArgs{:});
+SOut.csBins = struct(csBinArgs{:});
+SOut.rfBins = struct(rfBinArgs{:});
 %% Elementary metrics
 % Use these in derivations below
 SOut.wl      = wavelength; %wavelength vector
-SOut.sref    = Sref;
-SOut.stest   = Stest;
+
 SOut.s       = StestIn.s; %use this to get metrics
 %% Trichromatic Metrics
 % 2Deg
@@ -239,16 +241,16 @@ t2XYZ   = SOut.s'*[xbar,ybar,zbar];
     % SOut.test2degX    = t2XYZ(1);
     % SOut.test2degY    = t2XYZ(2);
     % SOut.test2degZ    = t2XYZ(3);
-SOut.spd2degX    = t2XYZ(1);
-SOut.spd2degY    = t2XYZ(2);
-SOut.spd2degZ    = t2XYZ(3);
+SOut.Trichromatic.spd2degX    = t2XYZ(1);
+SOut.Trichromatic.spd2degY    = t2XYZ(2);
+SOut.Trichromatic.spd2degZ    = t2XYZ(3);
 
 %     SOut.t2xy    = SOut.t2XYZ(1:2)./sum(SOut.t2XYZ);
 t2xy    = t2XYZ(1:2)./sum(t2XYZ);
 % SOut.test2degx = t2xy(1);
 % SOut.test2degy = t2xy(2);
-SOut.spd2degx = t2xy(1);
-SOut.spd2degy = t2xy(2);
+SOut.Trichromatic.spd2degx = t2xy(1);
+SOut.Trichromatic.spd2degy = t2xy(2);
 
 % 10 Deg
 %     SOut.t10XYZ  = Stest'*[xbar_10, ybar_10, zbar_10];
@@ -256,41 +258,46 @@ t10XYZ = SOut.s'*[xbar_10, ybar_10, zbar_10];
 % SOut.test10degX = t10XYZ(1);
 % SOut.test10degY = t10XYZ(2);
 % SOut.test10degZ = t10XYZ(3);
-SOut.spd10degX = t10XYZ(1);
-SOut.spd10degY = t10XYZ(2);
-SOut.spd10degZ = t10XYZ(3);
+SOut.Trichromatic.spd10degX = t10XYZ(1);
+SOut.Trichromatic.spd10degY = t10XYZ(2);
+SOut.Trichromatic.spd10degZ = t10XYZ(3);
 
 %     SOut.t10xy    = SOut.t10XYZ(1:2)./sum(SOut.t10XYZ);
 t10xy    = t10XYZ(1:2)./sum(t10XYZ);
 % SOut.test10degx = t10xy(1);
 % SOut.test10degy = t10xy(2);
-SOut.spd10degx = t10xy(1);
-SOut.spd10degy = t10xy(2);
+SOut.Trichromatic.spd10degx = t10xy(1);
+SOut.Trichromatic.spd10degy = t10xy(2);
 % XYZ2 and XYZ10 for reference
 %SOut.r2XYZ   = Sref'*[xbar,ybar,zbar];
 r2XYZ = SOut.sref'*[xbar,ybar,zbar];
-SOut.ref2X = r2XYZ(1);
-SOut.ref2Y = r2XYZ(2);
-SOut.ref2Z = r2XYZ(3);
+SOut.Trichromatic.ref2X = r2XYZ(1);
+SOut.Trichromatic.ref2Y = r2XYZ(2);
+SOut.Trichromatic.ref2Z = r2XYZ(3);
 
 %SOut.r10XYZ  = Sref'*[xbar_10,ybar_10,zbar_10];
 r10XYZ  = SOut.sref'*[xbar_10,ybar_10,zbar_10];
-SOut.ref10X = r10XYZ(1);
-SOut.ref10Y = r10XYZ(2);
-SOut.ref10Z = r10XYZ(3);
-%% End Trichromatic Metrics
-SOut.cct     = T_t;
-SOut.duv     = Duv_test;
+SOut.Trichromatic.ref10X = r10XYZ(1);
+SOut.Trichromatic.ref10Y = r10XYZ(2);
+SOut.Trichromatic.ref10Z = r10XYZ(3);
+
+SOut.Trichromatic.cct     = T_t;
+SOut.Trichromatic.duv     = Duv_test;
+%% Fidelity
 %             Rf_hbin = 10*log(exp(Rf_h_temp/10)+1);
-SOut.rf = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
-SOut.rg = fullData.Rg;
+SOut.TM30.rf = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
+SOut.TM30.rg = fullData.Rg;
 
-SOut.gref = ref.Bins.Jabz(:,2:3);
-SOut.gtest = test.Bins.Jabz(:,2:3);
+SOut.TM30.gref = ref.Bins.Jabz(:,2:3);
+SOut.TM30.gtest = test.Bins.Jabz(:,2:3);
 
-SOut.radWatts = trapz(SOut.wl, SOut.s);
-SOut.ler2  = SOut.spd2degY./SOut.radWatts;
-SOut.ler10 = SOut.spd10degY./SOut.radWatts;
+SOut.TM30.sref    = Sref;
+SOut.TM30.stest   = Stest;
+%Power
+
+SOut.Power.radWatts = trapz(SOut.wl, SOut.s);
+SOut.Power.ler2  = SOut.Trichromatic.spd2degY./SOut.Power.radWatts;
+SOut.Power.ler10 = SOut.Trichromatic.spd10degY./SOut.Power.radWatts;
 
 
 end
