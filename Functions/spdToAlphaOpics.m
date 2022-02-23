@@ -48,11 +48,11 @@ unitScale = 1000; %default output is watts. Multiply by 1000 to get mW/lm
 %%
 % spd(:,1) = SpdIn; %ensure column vec
 % 
-if length(SpdIn.s) ==401
+if length(SpdIn.Power.s) ==401
     wlInt =1;
-elseif length(SpdIn.s) ==81
+elseif length(SpdIn.Power.s) ==81
     wlInt = 5;
-elseif length(SpdIn.s) == 201
+elseif length(SpdIn.Power.s) == 201
     wlInt = 2;
 else
     error("wavelength interval is inocorrect")
@@ -104,10 +104,10 @@ smlmelrOpic = smlmelrOpicLoad(1:wlInt:end,:);
 % sense for each row to be a variable
 %therefore, it is s' *opics
 % alpha_opic_radiant_flux = spd'*[sOpic, mOpic, lOpic, melOpic, rOpic];
-alpha_opic_radiant_flux = SpdIn.s'*[smlmelrOpic];
+alpha_opic_radiant_flux = SpdIn.Power.s'*[smlmelrOpic];
 
 % the luminous flux is the same for each opic calculation
-luminous_flux           = K_m*SpdIn.s'*vLambda;
+luminous_flux           = K_m*SpdIn.Power.s'*vLambda;
 
 % SOut.sOpicELR   = unitScale*(alpha_opic_radiant_flux(1) / luminous_flux);
 % SOut.mOpicELR   = unitScale*(alpha_opic_radiant_flux(2) / luminous_flux);
