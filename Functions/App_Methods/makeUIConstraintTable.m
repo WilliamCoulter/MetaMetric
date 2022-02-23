@@ -14,7 +14,7 @@ dummyStruct = shuffleStructFields(dummyStruct,19);
 
 %% Get the fieldnames, which are the metrics. These are stored in app properties
 allMetrics = fieldnames(dummyStruct);
-MetricsEvaluated = 
+MetricsEvaluated = allMetrics;
 %% Create columns based on the number of elements
 % Set default constraints to none being used
 UseTF         = false( numel(MetricsEvaluated),1);
