@@ -32,12 +32,15 @@ grid(app.UIAxes_ImportedSPDs,'on')
 hold(app.UIAxes_ChromDiagram,'on');
 plotChromDiagram(2,app.UIAxes_ChromDiagram); %add a 2 deg chrom diagram to the axis handle
 pbaspect(app.UIAxes_ChromDiagram,[1 1 1]);
+%% Get list of all possible metrics to consider
+% These are all the scalar, non-struct fields returned via channelPercentsToSPDNestedStruct
+app.allPossibleMetrics = getAllPossibleMetrics;
 %% Create The UITree
 makeUITree_Constraints(app);
 %% Create Default Optimization Constraint Table
-[app.MetricsEvaluated] = makeUIConstraintTable(app); %helper function. It also assigns app.MetricsEvaluated property
+% [app.MetricsEvaluated] = makeUIConstraintTable(app); %helper function. It also assigns app.MetricsEvaluated property
 %% Set options for Optimization Goal Drop Downs
-app.DropDown_MetricGoal.Items = app.MetricsEvaluated;
+app.DropDown_MetricGoal.Items = app.allPossibleMetrics;
 app.DropDown_MaxOrMinGoal.Items = {'Maximize','Minimize'};
 %% Set default max iterations
 app.EditField_MaxIterations.Value = 500;
