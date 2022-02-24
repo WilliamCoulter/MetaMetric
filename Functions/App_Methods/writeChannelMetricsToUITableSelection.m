@@ -1,4 +1,4 @@
-function getChannelMetrics(app)
+function writeChannelMetricsToUITableSelection(app)
 %GETCHANNELMETRICS Summary of this function goes here
 %% Clear table in case they choose new selection
 app.UITable_ChannelSelection.Data = [];

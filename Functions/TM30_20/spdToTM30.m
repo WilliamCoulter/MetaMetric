@@ -55,8 +55,8 @@ if isempty(A_Planck)
         error("More than one " + " string(fileName))" + " found in path");
     end
     %% Ok load explicitly so it is seen in dep analyzer
-    load("Table_Planck.mat",'Table_Planck');
-    disp('Loaded Table Planck')
+    load('Table_Planck.mat','Table_Planck'); %from Table_Planck file, load var
+
     A_Planck = Table_Planck;
     A_Planck(:,5) = 1:height(A_Planck);
 end

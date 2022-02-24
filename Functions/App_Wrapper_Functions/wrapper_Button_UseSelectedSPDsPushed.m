@@ -25,6 +25,6 @@ cla(app.UIAxes_ImportedSPDs);
 plotSPDLibraryToChromDiagramAndSPDPlot(app)
 
 %% Process spds and put into the selection table
-getChannelMetrics(app);
+writeChannelMetricsToUITableSelection(app);
 end
 
