@@ -1,7 +1,8 @@
 function wrapper_Button_ImportTablePushed(app,event)
 %% Prompt user for CSV/Excel file and convert to table
-t = promptAndReadSPDTable(app);
+promptReadAssignPropImportedTable(app,event);
 %% Store entire table into the uitable
+t = app.userImportedTable;
 app.UITable_ImportedFile.Data = t;
 app.UITable_ImportedFile.ColumnName = t.Properties.VariableNames;
 app.EditField_ImportedFileName.Value = "Data Loaded From "  + string(app.importedFileName_Prop);
