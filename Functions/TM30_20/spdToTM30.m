@@ -48,10 +48,14 @@ if isempty(A_CMF_Inside) || isempty(RxArray) || isempty(A_TCS_Inside) || isempty
 end
 
 if isempty(A_Planck)
-%     fileName = 'Table_Planck.mat';
-%     filePath = which(fileName);
-    load("Functions/TM30_20/Table_Planck.mat",'Table_Planck');
-%     load(filePath);
+    %% Ensure only one exists
+    fileName = 'Table_Planck.mat';
+    filePath = which(fileName,'all');
+    if size( filePath,1 )>1
+        error("More than one " + " string(fileName))" + " found in path");
+    end
+    %% Ok load explicitly so it is seen in dep analyzer
+    load("Table_Planck.mat",'Table_Planck');
     disp('Loaded Table Planck')
     A_Planck = Table_Planck;
     A_Planck(:,5) = 1:height(A_Planck);
