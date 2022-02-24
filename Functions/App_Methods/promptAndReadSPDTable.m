@@ -19,6 +19,9 @@ try sheetnames(spdFileFullPath); %Put in try catch because it will return error 
             Options = cellstr(fileSheetNames) );
         t = readtable(spdFileFullPath,...
             ReadVariableNames= true, VariableNamingRule= 'preserve', Sheet=sel);
+        % Force app back to front
+        %https://www.mathworks.com/matlabcentral/answers/296305-appdesigner-window-ends-up-in-background-after-uigetfile
+        figure(app.UIFigure);
     elseif numel(fileSheetNames) ==1
         t = readtable(spdFileFullPath,...
             ReadVariableNames= true, VariableNamingRule= 'preserve');

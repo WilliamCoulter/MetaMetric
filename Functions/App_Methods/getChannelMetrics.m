@@ -15,13 +15,22 @@ app.UITable_ChannelSelection.RowName = [];
 % program, only display it.
 
 for nChannel = 1: width(app.userSPDLibrary)
-    [~,chPkLocs_temp,chPkFwhm_temp] =...
+    [chPkVals_temp,chPkLocs_temp,chPkFwhm_temp] =...
         findpeaks(app.userSPDLibrary(:,nChannel),...
         app.wlVecProgram,...
         'WidthReference','halfheight','MinPeakDistance',20,'MinPeakWidth',10);
+    %% only accept peaks if they are 10% or greater to max prom
+%     maxProm = max(chPkProm_temp);
+    scaledPkVals = chPkVals_temp./max(chPkVals_temp);
+    overTenPercTF = scaledPkVals > 0.10*max(scaledPkVals) ;
+
+    chPkLocs_temp = chPkLocs_temp(overTenPercTF);
+    chPkFwhm_temp = chPkFwhm_temp(overTenPercTF);
+    %%
+    %%
     chPkLocs{nChannel,1}(1,:) = string( round(chPkLocs_temp,1,"decimals") ).join(', ');
     chPkFwhm{nChannel,1}(1,:) = string( round(chPkFwhm_temp,1,"decimals") ).join(', ');
-    clear chPkLocs_temp chPkFwhm_temp
+    clear chPkLocs_temp chPkFwhm_temp chPkVals_temp
 % end
 %% Get wavelength centroid;
 % for nChannel = 1:width(app.userSPDLibrary)
