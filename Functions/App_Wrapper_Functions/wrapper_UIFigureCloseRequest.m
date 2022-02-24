@@ -1,7 +1,6 @@
-function [outputArg1,outputArg2] = wrapper_UIFigureCloseRequest(inputArg1,inputArg2)
+function wrapper_UIFigureCloseRequest(app,event)
 %WRAPPER_UIFIGURECLOSEREQUEST Summary of this function goes here
-%   Detailed explanation goes here
-outputArg1 = inputArg1;
-outputArg2 = inputArg2;
+saveMyDefaults(app,event);
+delete(app,event)
 end
 

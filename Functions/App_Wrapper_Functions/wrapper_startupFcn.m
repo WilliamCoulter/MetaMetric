@@ -7,7 +7,7 @@ function wrapper_startupFcn(app)
 % 3) Generate UIConstraint Table
 %% Load previous session's output folder
 try
-    app.loadMyDefaults;
+    myDefaults = loadMyDefaults;
 catch
 end
 %% Specify wavelength vector the program works with

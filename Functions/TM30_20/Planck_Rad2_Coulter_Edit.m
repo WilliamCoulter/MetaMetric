@@ -1,30 +1,8 @@
-% Coulter again edited this to load a mat file containing the array instead
-% of csvreading it each time. It also only loads mat file once if it isn't
-% there.
+function [Duv_test, m_m] = Planck_Rad2_Coulter_Edit
 
 % Generate Planckian (blackbody) source
 
-% Load table from IES-TM-30 online calc. 
-% filePlanck = 'source_PlanckTable.csv';
-% Table_Planck = csvread(filePlanck);
 
-%beginning coulter edit
-% persistent Table_Planck
-
-% if isempty(Table_Planck)
-%     load("Project_Libraries/Durmus_TM3020_Coulter_Edit/Table_Planck.mat");
-% end
-
-% end of coulter edit
-% Table_Planck = [Table_Planck, ones(size(Table_Planck,1),2) ]; %add columns to preallocate
-% for ttt=1:size(Table_Planck,1)
-%  % distance between planck u,v and test u,v
-% %     Table_Planck(ttt,4)=sqrt((u_t-Table_Planck(ttt,2))^2+(v_t-Table_Planck(ttt,3))^2);
-% %     Table_Planck(ttt,5)=ttt;
-%     Table_Planck(ttt,4:5)=[ sqrt((u_t-Table_Planck(ttt,2))^2+(v_t-Table_Planck(ttt,3))^2), ttt];
-% %     Table_Planck(ttt,5)=ttt;
-% end 
-        
 Table_Planck(:,4) = sqrt( ( u_t - Table_Planck(:,2) ).^2 + (v_t - Table_Planck(:,3)).^2);
 % Table_Planck(:,5) = 1:height(Table_Planck);
 
