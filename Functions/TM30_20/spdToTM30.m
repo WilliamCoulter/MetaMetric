@@ -5,7 +5,7 @@ function [SOutTM30Struct] = spdToTM30(StestIn)
 %% arrayCMFs should have [wavelength, x2,y2,z2, x10,y10,z10] in 380 to 780 in 1 nm increments
 %%
 arguments
-    StestIn (1,1) {isstruct}
+    StestIn (1,1) {mustBeA(StestIn,"struct")}
 end
 
 persistent A_CMF_Inside RxArray A_TCS_Inside A_DSeries_Inside A_Planck
@@ -48,10 +48,10 @@ if isempty(A_CMF_Inside) || isempty(RxArray) || isempty(A_TCS_Inside) || isempty
 end
 
 if isempty(A_Planck)
-    fileName = 'Table_Planck.mat';
-    filePath = which(fileName);
-    %         load("Functions/TM30_20/Table_Planck.mat");
-    load(filePath);
+%     fileName = 'Table_Planck.mat';
+%     filePath = which(fileName);
+    load("Functions/TM30_20/Table_Planck.mat",'Table_Planck');
+%     load(filePath);
     disp('Loaded Table Planck')
     A_Planck = Table_Planck;
     A_Planck(:,5) = 1:height(A_Planck);
