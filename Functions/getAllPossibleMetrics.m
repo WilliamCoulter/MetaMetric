@@ -45,8 +45,8 @@ for nestStructIdx = 1:numel(nestStructNames) %first fields are always structs. g
             %% 
             allMetrics = [allMetrics; fieldnames(nestStruct.(fn{fnIdx}) )];
         elseif ~isstruct(nestStruct.(fn{fnIdx})) && isscalar(nestStruct.(fn{fnIdx}))
-            allMetrics = [allMetrics;  fn{fnIdx}] %if fieldname is not a struct and is scalar, add it
-            
+            allMetrics = [allMetrics;  fn{fnIdx}]; %if fieldname is not a struct and is scalar, add it
+
         elseif ~isscalar(nestStruct.(fn{fnIdx})) % if it is not scalar, like a matrix, then error
             error("The fields need to be nonscalar for the program. ..." + ...
                 "They should have been removed via my removeNonScalarFields function -Will C")
