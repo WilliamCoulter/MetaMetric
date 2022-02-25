@@ -15,10 +15,13 @@ app.UITable_ChannelSelection.RowName = [];
 % program, only display it.
 
 for nChannel = 1: width(app.userSPDLibrary)
-    [~,chPkLocs_temp,chPkFwhm_temp] =...
+    [chPkVal_temp,chPkLocs_temp,chPkFwhm_temp] =...
         findpeaks(app.userSPDLibrary(:,nChannel),...
         app.wlVecProgram,...
         'WidthReference','halfheight','MinPeakDistance',20,'MinPeakWidth',10);
+    chPkLocs_temp = chPkLocs_temp( chPkVal_temp > .1*max(chPkVal_temp) );
+    chPkFwhm_temp = chPkFwhm_temp( chPkVal_temp > 0.1*max(chPkVal_temp));
+
     chPkLocs{nChannel,1}(1,:) = string( round(chPkLocs_temp,1,"decimals") ).join(', ');
     chPkFwhm{nChannel,1}(1,:) = string( round(chPkFwhm_temp,1,"decimals") ).join(', ');
     clear chPkLocs_temp chPkFwhm_temp
