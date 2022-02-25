@@ -28,17 +28,25 @@ initialGuessTable.Properties.VariableNames = app.UITable_ImportedFile.ColumnName
 iterationUsedTable = table(app.myBestOptimResult.metrics.IterationStop);
 iterationUsedTable.Properties.VariableNames = "Iterations Used";
 %% We have all of our tables as 1 row and many variables. Merge them
-myTableOneCol = [iterationUsedTable, myUiFunTable, solutionTable,...
+% a proper table is where the variables are each column, but we want to
+% swap that
+myOptimResultsTable_proper = [iterationUsedTable, myUiFunTable, solutionTable,...
     initialGuessTable, spdTable];
+%round all numeric values of table
+myOptimResultsTable_proper{ :,vartype('numeric') } =...
+    round( myOptimResultsTable_proper{:,vartype('numeric')},4,'significant');
+
 %% Make each run correspond to column instead of a row
 % SPDs are usually written column-wise
-myTableOneCol = rows2vars(myTableOneCol);
+myOptimResultsCellArray = table2cell(myOptimResultsTable_proper)'; %make it cell array column vec
+myOptimResultsTable = array2table(myOptimResultsCellArray,...
+    'RowNames',myOptimResultsTable_proper.Properties.VariableNames)
 % By default it make variable names a column on its own. Make
 % and assign rownames of table to the variable names then
 % delete the unused column of variable names now that they are
 % row namesmyTableOneCol
-myTableOneCol.Properties.RowNames= myTableOneCol.OriginalVariableNames;
-myTableOneCol.OriginalVariableNames = [];
+% myTableOneCol.Properties.RowNames= myTableOneCol.OriginalVariableNames;
+% myTableOneCol.OriginalVariableNames = [];
 %% Get optimization settings to put into a third sheet
 myProps = properties(app.myBestOptimResult.myOptimOptions);
 for prop = 1:numel(myProps)
@@ -65,8 +73,9 @@ figure(app.UIFigure);
 %write out merged table
 writetable(app.metricResultsTable,...
     app.outputSavePath, 'Sheet',1);
-myTableOneCol.Properties.VariableNames = "Best SPD";
-writetable(myTableOneCol,...
+
+myOptimResultsTable.Properties.VariableNames = "Best SPD";
+writetable(myOptimResultsTable,...
     app.outputSavePath, 'Sheet',2,'WriteRowNames',true,...
     'WriteVariableNames',true);
 
