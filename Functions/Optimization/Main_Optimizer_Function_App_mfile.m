@@ -35,7 +35,7 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
 %% Objective function
     function [f] = myObjFun(spdPercents, spdChannels,myUiFun) % pg 1-39 of their optimization documentation pdf
 
-        SpdMix = channelPercentsToSPDStruct(spdChannels,spdPercents);
+        SpdMix = channelPercentsToSPDNestedStruct(spdChannels,spdPercents);
 
         f = myUiFun.minOrMax*(SpdMix.(myUiFun.metric));
 
@@ -46,7 +46,7 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
 
         c = []; ceq = [];
 
-        SpdMix = channelPercentsToSPDStruct(spdChannels,spdPercents);
+        SpdMix = channelPercentsToSPDNestedStruct(spdChannels,spdPercents);
 
         [c,ceq] = uit_constraintsToConstraintVectors(SpdMix,myUiCon, c, ceq);
 
