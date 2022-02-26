@@ -19,7 +19,7 @@ try
     %% Make myUiCon struct from table
     checkedConstraintNodes = app.Tree_Constraints.CheckedNodes;
     constraintTags = {checkedConstraintNodes.Tag};
-%     app.myUiCon = table2struct(app.UITable_Constraints.Data)
+    app.myUiCon = table2struct(app.UITable_Constraints.Data);
     app.myUiCon = cell2struct(struct2cell(app.myUiCon),...
         {'Metric',...
         'LessThanTF','LessThanVal',...
@@ -35,26 +35,20 @@ try
         %% Make a random guess
         app.InitialGuessChannelPercents_Prop = 25+75*rand(sum(app.channelSelectedTF),1);
         %% Run optimization
-        [SpdMixOut, myOptimOptions,iterationStop,fVal(idxRun), optimizerOutput(idxRun)] = runOptimization(app);
-        %% If it is negative, then go to next attempt
-        %                     if min(SpdMixOut.Solution) < 0
-        %                         message = {'SPD Result Is Not All-Positive', 'No Data Will Be Saved Or Plotted', 'Try again'};
-        %                         uialert(app.UIFigure,message,'Error','Icon','Error');
-        % %                         app.myOptimResults(1) = []; %set to empty
-        %                         continue %if min is negative, then skip storing results and go to next idxRun
-        %                     end
+        [SpdMixOut(idxRun), myOptimOptions,fVal(idxRun), optimizerOutput(idxRun),channelSolution] = runOptimization(app);
         %% Store results into one structure array
-        app.myOptimResults(idxRun).metrics = SpdMixOut;
+        app.myOptimResults(idxRun).Solution = channelSolution;
         app.myOptimResults(idxRun).spdPercents0 = app.InitialGuessChannelPercents_Prop;
-        app.myOptimResults(idxRun).myUiFun = app.myUiFun;
+        app.myOptimResults(idxRun).myUiFun = app.myUiFun; %never changed so not really needed
+%         not needed
         app.myOptimResults(idxRun).myOptimOptions = myOptimOptions;
         app.myOptimResults(idxRun).myConstraintsTable = app.UITable_Constraints.Data;
         app.myOptimResults(idxRun).spdFileImportPath =  app.importedFileName_Prop;
-        app.myOptimResults(idxRun).iterationStop = iterationStop;
+%         app.myOptimResults(idxRun).iterationStop = iterationStop;
 
 
         isValid = ...
-            min( SpdMixOut.Solution >=0) && optimizerOutput(idxRun).constrviolation < 1e-2;
+            min( app.myOptimResults(idxRun).Solution >=0) && optimizerOutput(idxRun).constrviolation < 1e-2;
 
         %% Update best result
         % if the run is valid AND the optimized value is the
@@ -64,6 +58,7 @@ try
         if isValid ==1 && fVal(idxRun) < bestFVal
             bestFVal = fVal(idxRun);
             app.myBestOptimResult = app.myOptimResults(idxRun);
+            app.myBestSpdMix      = SpdMixOut(idxRun);
         end
 
     end

@@ -1,10 +1,4 @@
-%% *Welcome To MetaMesmerize, Will C.*
-
-%%%%% Assumptions
-% 1) user spds are at 100%, so we divide by 100 to get spd/percent. Then
-% we can multiply by 50 or 100 to get the real percent values.
-% Reset everything
-function [SpdMixOut,myOptimOptions,iterationStop,objectiveValue, fminconOutput] = Main_Optimizer_Function_App_mfile(spdPercents_0,spdChannels, myUiCon,myUiFun)
+function [SpdMixOut,myOptimOptions,objectiveValue, fminconOutput,channelSolution] = Main_Optimizer_Function_App_mfile(spdPercents_0,spdChannels, myUiCon,myUiFun)
 
 %% *Setup Output function*
 % https://www.mathworks.com/help/optim/ug/passing-extra-parameters.html
@@ -37,8 +31,7 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
 
         SpdMix = channelPercentsToSPDNestedStruct(spdChannels,spdPercents);
 
-%         f = myUiFun.minOrMax*(SpdMix.(myUiFun.metric));
-        f = myUiFun.minOrMax.* ( getfield( SpdMix, myUiFun.targetPath{:} ) );
+        f = myUiFun.minOrMax*( getfield( SpdMix, myUiFun.targetPath{:}) ) ;
 
     end
 %% Constraint Function
@@ -92,16 +85,17 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
                 end
             case 'done' %recreate all the metrics
                 SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
-                SpdMixOut.Solution = solution;
-                iterationStop = optimValues.iteration;
+%                 SpdMixOut.Solution = solution;
+%                 iterationStop = optimValues.iteration;
 
         end
-        SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
-        SpdMixOut.Solution = solution;
-        SpdMixOut.IterationStop = optimValues.iteration;
-        SpdMixOut.SpdPercents0 = spdPercents_0;
+        SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
+        channelSolution = solution;
+%         SpdMixOut.Solution = solution;
+%         SpdMixOut.IterationStop = optimValues.iteration;
+%         SpdMixOut.SpdPercents0 = spdPercents_0;
 %         SpdMixOut.
-        iterationStop = optimValues.iteration;
+%         iterationStop = optimValues.iteration;
     end
 
 
