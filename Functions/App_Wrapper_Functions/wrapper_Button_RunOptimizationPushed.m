@@ -5,6 +5,11 @@ try
     % Make myUiFun structure
     app.myUiFun.myOptIterations = app.EditField_MaxIterations.Value; %Query edit field
     app.myUiFun.metric = string(app.DropDown_MetricGoal.Value); %Query dropdown selection
+    %% Store search path of structure to get to the metric
+    app.myUiFun.targetPath = getStructPathFromNode(app.Tree_Constraints,app.myUiFun.metric)
+    % find which nested struct it is under
+    
+    %%
     switch app.DropDown_MaxOrMinGoal.Value %Convert from words to math. Minimizing the negative is maximizing
         case 'Maximize'
             app.myUiFun.minOrMax = -1;
@@ -12,12 +17,17 @@ try
             app.myUiFun.minOrMax = 1;
     end
     %% Make myUiCon struct from table
-    app.myUiCon = table2struct(app.UITable_Constraints.Data);
+    checkedConstraintNodes = app.Tree_Constraints.CheckedNodes
+    constraintTags = {checkedConstraintNodes.Tag}
+%     app.myUiCon = table2struct(app.UITable_Constraints.Data)
     app.myUiCon = cell2struct(struct2cell(app.myUiCon),...
-        {'Metric','UseTF',...
+        {'Metric',...
         'LessThanTF','LessThanVal',...
         'EqualToTF','EqualToVal',...
         'GreaterThanTF','GreaterThanVal'});
+    for idx = 1:numel(app.myUiCon)
+        app.myUiCon(idx).targetPath = getStructPathFromNode(app.Tree_Constraints,app.myUiCon(idx).Metric);
+    end
     %% Go through nRuns
     bestFVal = inf; %best fval is infinity, so anything is better
     app.myBestOptimResult = []; %initialize to empty

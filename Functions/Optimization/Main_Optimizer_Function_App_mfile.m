@@ -37,7 +37,8 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
 
         SpdMix = channelPercentsToSPDNestedStruct(spdChannels,spdPercents);
 
-        f = myUiFun.minOrMax*(SpdMix.(myUiFun.metric));
+%         f = myUiFun.minOrMax*(SpdMix.(myUiFun.metric));
+        f = myUiFun.minOrMax.* ( getfield( SpdMix, myUiFun.targetPath{:} ) );
 
     end
 %% Constraint Function
