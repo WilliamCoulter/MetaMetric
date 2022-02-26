@@ -6,7 +6,7 @@ try
     app.myUiFun.myOptIterations = app.EditField_MaxIterations.Value; %Query edit field
     app.myUiFun.metric = string(app.DropDown_MetricGoal.Value); %Query dropdown selection
     %% Store search path of structure to get to the metric
-    app.myUiFun.targetPath = getStructPathFromNode(app.Tree_Constraints,app.myUiFun.metric)
+    app.myUiFun.targetPath = getStructPathFromNode(app.Tree_Constraints,app.myUiFun.metric);
     % find which nested struct it is under
     
     %%
@@ -17,8 +17,8 @@ try
             app.myUiFun.minOrMax = 1;
     end
     %% Make myUiCon struct from table
-    checkedConstraintNodes = app.Tree_Constraints.CheckedNodes
-    constraintTags = {checkedConstraintNodes.Tag}
+    checkedConstraintNodes = app.Tree_Constraints.CheckedNodes;
+    constraintTags = {checkedConstraintNodes.Tag};
 %     app.myUiCon = table2struct(app.UITable_Constraints.Data)
     app.myUiCon = cell2struct(struct2cell(app.myUiCon),...
         {'Metric',...
