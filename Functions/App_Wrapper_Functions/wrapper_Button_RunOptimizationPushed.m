@@ -76,16 +76,16 @@ try
 
     %% write to uitable results
     metricResultsStructToTable(app);
-    app.UITable_OptimizationResults.Data = app.metricResultsTable;
+    app.UITable_OptimizationResults.Data = app.metricResultsTable; %keep table instead of uitable so I can use this for writing to excel
     %% Write spd to uiaxes
     cla(app.UIAxes_OptimSPD);
     hold(app.UIAxes_OptimSPD,'on');
     plot(app.UIAxes_OptimSPD ,...
-        app.myBestOptimResult.metrics.wl, app.myBestOptimResult.metrics.s);
+        app.wlVecProgram, app.myBestSpdMix.Power.s);
 
     plot(app.UIAxes_OptimSPD,...
-        app.myBestOptimResult.metrics.wl,...
-        app.userSPDLibrary(:,app.channelSelectedTF).*app.myBestOptimResult.metrics.Solution',...
+        app.wlVecProgram,...
+        app.userSPDLibrary(:,app.channelSelectedTF).*app.myBestOptimResult.Solution',...
         LineStyle="--");
 
     app.UIAxes_OptimSPD.XLim = [380,780];
