@@ -25,7 +25,7 @@ if isfile('MyAppDefaults.mat') % Check it exists.
         % Logically combine. Public access and not Parent
         idxUse = setAccessPublicTF & ~propIsParentTF;
         % Get the names of all the properties
-        pListUse = {pList(idxUse).Name} %list of all properties
+        pListUse = {pList(idxUse).Name}; %list of all properties
         %% Loop through the list of properties we want
         % Assign each property that was filtered above from the
         % myDefault structure into the app

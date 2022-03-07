@@ -44,6 +44,7 @@ try
         app.myOptimResults(idxRun).myOptimOptions = myOptimOptions;
         app.myOptimResults(idxRun).myConstraintsTable = app.UITable_Constraints.Data;
         app.myOptimResults(idxRun).spdFileImportPath =  app.importedFileName_Prop;
+        app.myOptimResults(idxRun).optimizerOutput = optimizerOutput(idxRun);
 %         app.myOptimResults(idxRun).iterationStop = iterationStop;
 
 

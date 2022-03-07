@@ -1,6 +1,7 @@
 function wrapper_Button_ExportOptimizationPushed(app,event)
 %% Create set of tables
 
+
 myUiFunTable = struct2table(app.myBestOptimResult.myUiFun,'AsArray',true);
 if myUiFunTable.minOrMax == -1
     myUiFunTable.minOrMax = "Maximize";
@@ -9,23 +10,25 @@ elseif myUiFunTable.minOrMax == 1
 else
     msgbox("Unknown goal type (min or max) when writing myUiFun to table",'Error','error');
 end
+myUiFunTable = splitvars(myUiFunTable);
+
 
 % SPD Watts/nm
-spdTable = splitvars(table(app.myBestOptimResult.metrics.stest'));
+spdTable = splitvars(table(app.myBestSpdMix.Power.s'));
 spdTable.Properties.VariableNames = cellstr("Wavelength(nm): " +...
-    string(app.myBestOptimResult.metrics.wl) );
+    string(app.wlVecProgram) );
 % The mixture of channels used for solution
-solutionTable = splitvars(table( round(app.myBestOptimResult.metrics.Solution,2,'decimals')' ));
+solutionTable = splitvars(table( round(app.myBestOptimResult.Solution,2,'decimals')' ));
 %             solutionTable.Properties.VariableNames = cellstr( "Channel "...
 %                 + string( 1:numel(app.myBestOptimResult.metrics.Solution) ) + " %" );
 solutionTable.Properties.VariableNames = app.UITable_ImportedFile.ColumnName(app.channelSelectedTF);
 % The initial guess percent for each channel
-initialGuessTable = splitvars(table(app.myBestOptimResult.metrics.SpdPercents0') );
+initialGuessTable = splitvars(table(app.myBestOptimResult.spdPercents0') );
 %             initialGuessTable.Properties.VariableNames = cellstr( "Channel " +...
 %                 string( 1:numel(app.myBestOptimResult.metrics.SpdPercents0)) + " Initial Guess %") ;
 initialGuessTable.Properties.VariableNames = app.UITable_ImportedFile.ColumnName(app.channelSelectedTF) + " Initial Guess %";
 % How many iterations were used for optimization run
-iterationUsedTable = table(app.myBestOptimResult.metrics.IterationStop);
+iterationUsedTable = table(app.myBestOptimResult.optimizerOutput.iterations);
 iterationUsedTable.Properties.VariableNames = "Iterations Used";
 %% We have all of our tables as 1 row and many variables. Merge them
 myTableOneCol = [iterationUsedTable, myUiFunTable, solutionTable,...
