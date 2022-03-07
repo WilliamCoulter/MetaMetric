@@ -33,21 +33,18 @@ iterationUsedTable.Properties.VariableNames = "Iterations Used";
 %% We have all of our tables as 1 row and many variables. Merge them
 % a proper table is where the variables are each column, but we want to
 % swap that
-myTableOneCol = [iterationUsedTable, myUiFunTable, solutionTable,...
+myOptimResultsTable_proper = [iterationUsedTable, myUiFunTable, solutionTable,...
     initialGuessTable, spdTable];
 %round all numeric values of table
-myTableOneCol{ :,vartype('numeric') } =...
-    round( myTableOneCol{:,vartype('numeric')},4,'significant');
+myOptimResultsTable_proper{ :,vartype('numeric') } =...
+    round( myOptimResultsTable_proper{:,vartype('numeric')},4,'significant');
 
 %% Make each run correspond to column instead of a row
 % SPDs are usually written column-wise
-myTableOneCol = rows2vars(myTableOneCol);
-% By default it make variable names a column on its own. Make
-% and assign rownames of table to the variable names then
-% delete the unused column of variable names now that they are
-% row namesmyTableOneCol
-myTableOneCol.Properties.RowNames= myTableOneCol.OriginalVariableNames;
-myTableOneCol.OriginalVariableNames = [];
+myOptimResultsCellArray = table2cell(myOptimResultsTable_proper)'; %make it cell array column vec
+myOptimResultsTable = array2table(myOptimResultsCellArray,...
+    'RowNames',myOptimResultsTable_proper.Properties.VariableNames)
+
 %% Get optimization settings to put into a third sheet
 myProps = properties(app.myBestOptimResult.myOptimOptions);
 for prop = 1:numel(myProps)
@@ -73,17 +70,18 @@ figure(app.UIFigure);
 
 %write out merged table
 writetable(app.metricResultsTable,...
-    app.outputSavePath, 'Sheet',1);
-myTableOneCol.Properties.VariableNames = "Best SPD";
-writetable(myTableOneCol,...
-    app.outputSavePath, 'Sheet',2,'WriteRowNames',true,...
-    'WriteVariableNames',true);
+    app.outputSavePath, "Sheet","Metric_Results");
+
+myOptimResultsTable.Properties.VariableNames = "Best SPD";
+writetable(myOptimResultsTable,...
+    app.outputSavePath, "Sheet","SPD_Solution","WriteRowNames",true,...
+    "WriteVariableNames",true);
 
 writetable(app.myBestOptimResult.myConstraintsTable,...
-    app.outputSavePath, 'Sheet',3);
+    app.outputSavePath, "Sheet","ConstraintsUsed");
 
 writetable(optionTable,...
-    app.outputSavePath, 'Sheet',4);
+    app.outputSavePath, "Sheet","Algo_Options");
 
 
 end
