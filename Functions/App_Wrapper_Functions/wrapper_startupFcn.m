@@ -17,6 +17,18 @@ end
 app.wlVecProgram = [];
 % app.wlIntProgram = 
 app.wlVecProgram(:,1) = 380:5:780;
+
+%% Create dummy struct
+dummyStruct = channelPercentsToSPDNestedStruct(ones(401,1));
+fn = fieldnames(dummyStruct);
+for fnIdx = 1:numel(fn)
+    if ~isstruct(dummyStruct.(fn{fnIdx})) %check that first layer is all struct
+        error("You need to have the first layer of the spd structure that..." + ...
+            "has all of the metrics to be structures themselves");
+    end
+    [dummyStruct.(fn{fnIdx})] = removeNonScalarFields(dummyStruct.(fn{fnIdx}) );
+end
+app.dummyStruct = dummyStruct;
 %%
 hold(app.UIAxes_OptimSPD,'on');
 title(app.UIAxes_OptimSPD, "Most Recent SPD");
@@ -37,7 +49,7 @@ plotChromDiagram(2,app.UIAxes_ChromDiagram); %add a 2 deg chrom diagram to the a
 pbaspect(app.UIAxes_ChromDiagram,[1 1 1]);
 %% Get list of all possible metrics to consider
 % These are all the scalar, non-struct fields returned via channelPercentsToSPDNestedStruct
-app.allPossibleMetrics = getAllPossibleMetrics;
+app.allPossibleMetrics = getAllPossibleMetrics(app);
 %% Create The UITree
 makeUITree_Constraints(app);
 %% Create Default Optimization Constraint Table

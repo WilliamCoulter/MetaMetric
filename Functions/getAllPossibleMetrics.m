@@ -1,30 +1,13 @@
-function [allMetrics] = getAllPossibleMetrics
-%% This calls the channelPercentsToSPDNestedStruct and removeNonScalarFields 
-% and parses it to find all metrics that are scalar
-
-%% Create the dummyStruct.
-% Note that some fields are not used for constraints but for other things
-% like plotting, so we need to remove the nonscalar fields.
-% 
-dummyStruct = channelPercentsToSPDNestedStruct(ones(401,1));
-%
-fn = fieldnames(dummyStruct);
-for fnIdx = 1:numel(fn)
-    if ~isstruct(dummyStruct.(fn{fnIdx})) %check that first layer is all struct
-        error("You need to have the first layer of the spd structure that..." + ...
-            "has all of the metrics to be structures themselves");
-    end
-    [dummyStruct.(fn{fnIdx})] = removeNonScalarFields(dummyStruct.(fn{fnIdx}) );
-end
+function [allMetrics] = getAllPossibleMetrics(app)
 
 %% Go through the structure and parse out all scalar fieldnames to get a list of all
 % potential metrics
 
-nestStructNames = fieldnames(dummyStruct); %these are the nested structure
+nestStructNames = fieldnames(app.dummyStruct); %these are the nested structure
 allMetrics = {};
 for nestStructIdx = 1:numel(nestStructNames) %first fields are always structs. go through each
     
-    nestStruct = dummyStruct.(nestStructNames{nestStructIdx}); %first layer always struct. temporarily assign
+    nestStruct = app.dummyStruct.(nestStructNames{nestStructIdx}); %first layer always struct. temporarily assign
     if ~isstruct(nestStruct) %Like above, ensure they are all struct
         error("Fieldnames of struct must all be structures for program - Will C")
     end
