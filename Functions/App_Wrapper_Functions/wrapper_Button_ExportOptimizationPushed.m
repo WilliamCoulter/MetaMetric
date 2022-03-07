@@ -31,8 +31,14 @@ initialGuessTable.Properties.VariableNames = app.UITable_ImportedFile.ColumnName
 iterationUsedTable = table(app.myBestOptimResult.optimizerOutput.iterations);
 iterationUsedTable.Properties.VariableNames = "Iterations Used";
 %% We have all of our tables as 1 row and many variables. Merge them
+% a proper table is where the variables are each column, but we want to
+% swap that
 myTableOneCol = [iterationUsedTable, myUiFunTable, solutionTable,...
     initialGuessTable, spdTable];
+%round all numeric values of table
+myTableOneCol{ :,vartype('numeric') } =...
+    round( myTableOneCol{:,vartype('numeric')},4,'significant');
+
 %% Make each run correspond to column instead of a row
 % SPDs are usually written column-wise
 myTableOneCol = rows2vars(myTableOneCol);
