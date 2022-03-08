@@ -62,6 +62,7 @@ horizAlignStyle = uistyle("HorizontalAlignment","center");
 addStyle(app.UITable_ChannelSelection,horizAlignStyle);
 
 %%
-
+app.channelSelectedTF= app.UITable_ChannelSelection.Data{:,1};
+%%
 end
 

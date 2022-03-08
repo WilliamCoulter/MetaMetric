@@ -50,17 +50,9 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
     function stop = myOutFunPassed(solution,optimValues,state,spdChannels)
         %https://www.mathworks.com/help/optim/ug/output-functions.html
         %https://www.mathworks.com/help/optim/ug/output-function-problem-based.html
-%         app.OptimizationRunStopTF_Prop
-%         t = get(gcf);
+
         stop = false;
-%         a = 1;
-%         stop = app.OptimizationRunStopTF_Prop;
-%         if stop == true
-% %             SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
-% %             iterationStop = optimValues.iteration;
-%             disp("entered")
-%             return
-%         end
+
 
 %         stop = app.ButtonStop.Value
         switch state
@@ -68,34 +60,14 @@ options = optimoptions('fmincon','MaxFunctionEvaluations',50000,...
                 myOptimOptions = options;
 
             case 'iter' %store only the only things that go to output function :(
-                
-                if optimValues.iteration ==0
-%                     getappdata()
-%                     disp(app.importedFileName_Prop)
-
-%                     defFig = get(gcf);
-%                     a=1;
-%                     plotSPD = plot(spdChannels*spdPercents_0);
-%                     set(gca, 'xlim',[380, 780]);
-%                     set(plotSPD,'Tag','optimPlotSPD');
-                elseif mod(optimValues.iteration,10) ==0
-%                     disp(optimValues.iteration)
-%                     plotSPD = findobj(get(gca,'Children'),'Tag','optimPlotSPD');
-%                     set(plotSPD, 'YData', spdChannels*solution);
-                end
+               
             case 'done' %recreate all the metrics
-                SpdMixOut = channelPercentsToSPDStruct(spdChannels,solution);
-%                 SpdMixOut.Solution = solution;
-%                 iterationStop = optimValues.iteration;
+
 
         end
         SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
         channelSolution = solution;
-%         SpdMixOut.Solution = solution;
-%         SpdMixOut.IterationStop = optimValues.iteration;
-%         SpdMixOut.SpdPercents0 = spdPercents_0;
-%         SpdMixOut.
-%         iterationStop = optimValues.iteration;
+
     end
 
 

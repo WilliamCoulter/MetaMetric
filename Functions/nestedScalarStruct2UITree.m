@@ -37,7 +37,7 @@ end
 for fnIdx = 1:numel(fn)
     uitreenode(parentNode, 'Text', fn{fnIdx},...
         'tag', fn{fnIdx},...
-        'NodeData', StructureLayer.(fn{fnIdx}) );
+        'NodeData', StructureLayer.(fn{fnIdx}));
 end
 
 %% if it is structure, we need to do it again!Function RECURSION!

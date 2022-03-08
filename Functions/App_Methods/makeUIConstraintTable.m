@@ -1,10 +1,10 @@
 function makeUIConstraintTable(app,metricsToList)
-
+% metricsToList = [];
 %% Create columns based on the number of elements
 % Set default constraints to none being used
 % UseTF         = false( numel(metricsToList),1);
 LessThanTF    = false(numel(metricsToList),1);
-EqualToTF     = true(numel(metricsToList),1); %default
+EqualToTF     = false(numel(metricsToList),1); %default
 GreaterThanTF = false(numel(metricsToList),1 );
 
 % Min > -inf, max < +inf, and equal is default to 0.
@@ -14,7 +14,7 @@ GreaterThanVal = -1*inf*ones( numel(metricsToList),1);
 
 %% Create a standard table
 % use comma-separated variables as variablenames
-myConstraintTableNames = ["Metric.",...
+myConstraintTableNames = ["Metric",...
     "Use < Constraint?", "Less than what?",...
     "Use = Constraint?", "Equal to what?",...
     "Use > Constraint?", "Greater than what?"];
@@ -25,7 +25,8 @@ constraints_Table = table(metricsToList,...
     GreaterThanTF,GreaterThanVal,...
     VariableNames=myConstraintTableNames);
 
-
+%Add row names to make indexin easier. It won't appear anyway
+constraints_Table.Properties.RowNames = constraints_Table.Metric;
 %% Fill in the uitable
 app.UITable_Constraints.Data = constraints_Table;
 %% Set utable properties
