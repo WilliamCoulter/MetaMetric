@@ -13,11 +13,11 @@ function [fieldNamePath] = getStructPathFromNode(tree,tagToSearch)
 targetNode = findobj(tree,'tag', tagToSearch);
 parentHierarchy = {};
 nodeSearch = targetNode;
-t0=tic;
+% t0=tic;
 while class(nodeSearch.Parent) ~= "matlab.ui.container.CheckBoxTree"
-    if toc-t0 >15 %while loops scare me
-        error("Finding structure path to metric goal took too long")
-    end
+%     if toc-t0 >15 %while loops scare me
+%         error("Finding structure path to metric goal took too long")
+%     end
     parentHierarchy{end+1} = nodeSearch.Parent.Tag; %get & store tag of parent
     nodeSearch = nodeSearch.Parent; %go up one level
 end
