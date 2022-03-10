@@ -70,7 +70,8 @@ try
     if isempty(app.myBestOptimResult)
         message = {'All SPD Results Violated The Constraints',...
             'No Data Will Be Saved Or Plotted',...
-            'Try Again With HonorBounds Checked On'};
+            'Are you sure your constraints can be satisfied',...
+            'Perhaps you selected > and = for the same metric?'};
         uialert(app.UIFigure,message,'Error','Icon','Error');
         %                         app.myOptimResults(1) = []; %set to empty
     end
