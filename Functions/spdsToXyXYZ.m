@@ -28,32 +28,4 @@ switch obs
         xy = [XYZ(:,1), XYZ(:,2)] ./ sum(XYZ,2);
 end
 
-%% old code. Delete if encounter issues
-% if width(cmfs) ~= 3
-%     error(" spdsToXyXYZ currently does not support more than 3cmfs. ")
-% end
-
-% if size(spectrum,2) == 1
-%     spectrum = [ (360:830)' spectrum ];
-% end
-
-% K_b = 683;
-
-% for i = 1:size(spectrum,2)
-% %     [XYZ(i,:)] = K_b*spectrum(:,i)'*cmfs(:,1:3);
-%     [XYZ(i,:)] = K_b*spectrum'*cmfs;
-%     
-%     x     = XYZ(1)/sum(XYZ);
-%     y     = XYZ(2)/sum(XYZ);
-% 
-%     xy(i,:)= [x, y];    
-% end
-%
-% go from Mwave X Nchann to Nchann x Mwavel
-% spectrum = spectrum';
-% % make Nchan X 3 = Nchann xMwave * Mwave x 3
-% [XYZ] = K_b*spectrum*cmfs;
-% xy = [XYZ(:,1), XYZ(:,2)] ./ sum(XYZ,2);
-
-
 end

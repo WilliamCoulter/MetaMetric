@@ -30,17 +30,7 @@ function [SOut] = spdToAlphaOpics( SpdIn)
 arguments
     SpdIn (1,1) {isstruct}
 end
-%% Deal with possible (preferred) structure input
-% if isstruct(SpdIn) == 1 %
-%     %it is a sructure, so we want to go through this code and add the
-%     %fields at the end to the input.
-%     SOut = SpdIn;
-%     spd = SpdIn.stest; %reassing and just get the spectrum, which is what the code expects. so it uses SpdIn, rewritten if it is struct
-% elseif ~isstruct(SpdIn)
-%     spd = SpdIn;
-%     SOut.stest = SpdIn;
-% end
-% spd = SpdIn.s;
+
 %% Set Constants
 K_m = 683.002; %lm/Watt
 unitScale = 1000; %default output is watts. Multiply by 1000 to get mW/lm
@@ -69,9 +59,7 @@ if isempty(vLambda1924)
 end
 vLambda = vLambda1924(21:421,2); %vlambda cropped to 380:1:780
 vLambda = vLambda(1:wlInt:end);
-% [~,minInd] = min(abs(vLambda1924(:,1)-380));
-% [~,maxInd] = min(abs(vLambda1924 - 780) );
-% vLambda = vLambda1924(minInd:maxInd,2);
+
 
 persistent smlmelrOpicLoad
 if isempty(smlmelrOpicLoad)
@@ -83,21 +71,7 @@ if isempty(smlmelrOpicLoad)
     smlmelrOpicLoad(isnan(smlmelrOpicLoad))=0;
 end
 smlmelrOpic = smlmelrOpicLoad(1:wlInt:end,:);
-%% Assign Values and remove Nans
-% wlOpic = T_Alpha_Opic_Radiometric.nm;
-% sOpic = T_Alpha_Opic_Radiometric.sc(1:wlInt:end);
-% mOpic = T_Alpha_Opic_Radiometric.mc(1:wlInt:end); 
-% lOpic = T_Alpha_Opic_Radiometric.lc(1:wlInt:end);
-% rOpic = T_Alpha_Opic_Radiometric.rh(1:wlInt:end);
-% melOpic = T_Alpha_Opic_Radiometric.mel(1:wlInt:end);
 
-
-%remove nans if needed
-% sOpic(isnan(sOpic))     = 0;
-% mOpic(isnan(mOpic))     = 0;
-% lOpic(isnan(lOpic))     = 0;
-% melOpic(isnan(melOpic)) = 0;
-% rOpic(isnan(rOpic))     = 0;
 %% Obtain Luminous Efficacy Of Radiation
 
 % spectrum is 401 x 1. Opics are 401 x5. We want a 5x1 or 1x5. 1x5 makes
@@ -109,26 +83,11 @@ alpha_opic_radiant_flux = SpdIn.Power.s'*[smlmelrOpic];
 % the luminous flux is the same for each opic calculation
 luminous_flux           = K_m*SpdIn.Power.s'*vLambda;
 
-% SOut.sOpicELR   = unitScale*(alpha_opic_radiant_flux(1) / luminous_flux);
-% SOut.mOpicELR   = unitScale*(alpha_opic_radiant_flux(2) / luminous_flux);
-% SOut.lOpicELR   = unitScale*(alpha_opic_radiant_flux(3) / luminous_flux);
-% SOut.melOpicELR = unitScale*(alpha_opic_radiant_flux(4) / luminous_flux);
-% SOut.rOpicELR   = unitScale*(alpha_opic_radiant_flux(5) / luminous_flux);
-% sOpicELR   = unitScale*(alpha_opic_radiant_flux(1) / luminous_flux);
-% mOpicELR   = unitScale*(alpha_opic_radiant_flux(2) / luminous_flux);
-% lOpicELR   = unitScale*(alpha_opic_radiant_flux(3) / luminous_flux);
-% melOpicELR = unitScale*(alpha_opic_radiant_flux(4) / luminous_flux);
-% rOpicELR   = unitScale*(alpha_opic_radiant_flux(5) / luminous_flux);
-
 smlmelrOpicELR = unitScale.*alpha_opic_radiant_flux/luminous_flux;
 %% Obtain Daylight (D65) Efficacy Ratio
 %Alpha Opic Efficacy of Luminous Radiation For Daylight (D65), CIE S026
 %2018, 3.10
-% K_D65.s = 0.8173; %mW/lm
-% K_D65.m = 1.4558; %mW/lm
-% K_D65.l = 1.6289; %mW/lm
-% K_D65.mel = 1.3262;  %mW/Lm
-% K_D65.r = 1.4497; %mW/lm
+
 K_D65_smlmelr = [0.8173, 1.4558, 1.6289, 1.3262, 1.4497];
 
 % Via Note 2 to entry, abbreviated term is Alpha-Opic DER
@@ -138,7 +97,5 @@ SOut.mOpicDER   = smlmelrOpicELR(2) / K_D65_smlmelr(2);
 SOut.lOpicDER   = smlmelrOpicELR(3) / K_D65_smlmelr(3);
 SOut.melOpicDER = smlmelrOpicELR(4) / K_D65_smlmelr(4);
 SOut.rOpicDER   = smlmelrOpicELR(5) / K_D65_smlmelr(5);
-% 
-% SOut.ELR2 = luminous_flux/trapz( (380:wlInt:780), spd);
 
 end

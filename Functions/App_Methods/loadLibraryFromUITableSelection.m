@@ -15,8 +15,6 @@ cellSelection = app.UITable_ImportedFile.Selection;
 uniqueRow = unique(cellSelection(:,1) ); %note that unique automatically sorts in ascending order
 uniqueCol = unique(cellSelection(:,2) );
 
-
-
 subTableSelected = app.UITable_ImportedFile.Data(uniqueRow,uniqueCol); %selected set of SPDs
 importHeaders =  subTableSelected.Properties.VariableNames;
 
@@ -89,30 +87,6 @@ for spdCol = 1:width(spdChannelArray)
         xInterp, userMethod,...
         extrapVal); %set value for data outside of xInterp
 end
-%% Step 6: If over 99% of power is outside of 380-780, notify and set all to 0
-
-% for i = 1:width(spdChannelArray)
-%     powInRange(i) = trapz(app.wlVecProgram, subTableArray(:,i) ) %use interpolated value to check inside 380 to 780
-%     powTotal(i)   = trapz(rawUserWavelength, spdChannelArray(:,i))
-% 
-% end
-% idOver99OfPowOutside = powInRange./PowTotal < 0.01
-% if idOver99OfPowOutside >0 %if there is at least one that has too little power
-%     message = ["The following SPD channel column numbers (in order of selection) were set to 0";
-%         "They had over 99% of their power outside the range 380:780nm";
-%         ]
-%     uialert(app.UIFigure, message,'Warning','Icon','warning');
-% 
-% %     uialert('')
-% a
-
-
-%% Make sure that the selected array is rectangular
-% Load the min and max wavelength
-
-% app.wlIntUserImported_Prop = (780-380)/(height(subTableArray)-1);
-% app.wlUserImported = [380:app.wlIntUserImported_Prop:780]';
-
 
 %% Check they are all positive
 if any(subTableArray(:,:)< 0,'all') % check 'all' values to see if any are < 0

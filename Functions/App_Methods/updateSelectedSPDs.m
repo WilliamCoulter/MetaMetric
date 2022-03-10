@@ -20,9 +20,6 @@ currentFilledxy = findobj(app.UIAxes_ChromDiagram,...
     tag= "filledxySPDs");
 currentFilledxy.XData = app.xyuserSPDLibrary( (app.channelSelectedTF),1);
 currentFilledxy.YData = app.xyuserSPDLibrary((app.channelSelectedTF),2);
-% currentFilledxy.MarkerFaceColor = [0 0.8 0]; %green
-% %             currentFilledxy.
-% currentFilledxy.MarkerFaceAlpha = 0.25;
-% currentFilledxy.SizeData = 100;
+
 end
 
