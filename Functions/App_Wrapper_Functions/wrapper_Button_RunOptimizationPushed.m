@@ -30,8 +30,27 @@ try
         lessThanTF = [app.myUiCon.LessThanTF];
         equalToTF  = [app.myUiCon.EqualToTF];
         greaterThanTF = [app.myUiCon.GreaterThanTF];
-        useAnyTF = [lessThanTF; equalToTF; greaterThanTF];
+        useAnyTF = [lessThanTF; equalToTF; greaterThanTF]; %only pass in rows with ANY checks
+        %check that if equal is chosen for row that no other is chosen
+        idxEqualToTrue = equalToTF ==1;
+        %create a logical array of all metrics specifically with equal to
+        %being chosen. 
+        logicArrayMetricsEqual = useAnyTF(:,idxEqualToTrue);
+        % Of the metrics with equal chosen, if the sum of all chosen is
+        % greater than 1, then there is a logical violation. can't set =
+        % and >
+        anyImpossibleConTF = any( sum(logicArrayMetricsEqual) >1); 
+        if anyImpossibleConTF == 1
+              message = {'Impossible set of constraints.', ...
+                  'At least one metric has = constraint AND > or < constraint.',...
+            'Optimization will not run.',...
+            'Please fix your constraint table and press run again'};
+            uialert(app.UIFigure,message,'Error','Icon','Error');
+            return
+        end
         app.myUiCon(~any(useAnyTF) ) = [];
+
+
     for idx = 1:numel(app.myUiCon)
         app.myUiCon(idx).targetPath = getStructPathFromNode(app.Tree_Constraints,app.myUiCon(idx).Metric);
     end
@@ -40,14 +59,19 @@ try
     bestFVal = inf; %best fval is infinity, so anything is better
     app.myBestOptimResult = []; %initialize to empty
     f = figure(1);clf;
+    % Preallocate the x and y data points of the plot to drastically speed
+    % it up
     plotAx = axes(f);
-
+%     optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value), NaN(app.EditField_NRuns.Value),'-ok','MarkerFaceColor','k' );
+    
     for idxRun = 1:app.EditField_NRuns.Value
-        cla(plotAx);
+        optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value), NaN(app.EditField_NRuns.Value),'-ok','MarkerFaceColor','k' );
+
+%         cla(optimPlots(1));
         %% Make a random guess
         app.InitialGuessChannelPercents_Prop = 25+75*rand(sum(app.channelSelectedTF),1);
         %% Run optimization
-        [SpdMixOut(idxRun), myOptimOptions,fVal(idxRun), optimizerOutput(idxRun),channelSolution ]= runOptimization(app,plotAx);
+        [SpdMixOut(idxRun), myOptimOptions,fVal(idxRun), optimizerOutput(idxRun),channelSolution ]= runOptimization(app,optimPlots);
         %% Store results into one structure array
         app.myOptimResults(idxRun).Solution = channelSolution;
         app.myOptimResults(idxRun).spdPercents0 = app.InitialGuessChannelPercents_Prop;
@@ -105,6 +129,8 @@ try
     app.UIAxes_OptimSPD.XLim = [380,780];
 
     %%
+    uialert(app.UIFigure,"Go to Next Pane",'Optimization Complete','icon','info')
+
 catch ME
     report = getReport(ME);
     uialert(app.UIFigure, report, 'Error Message', 'Interpreter','html')
