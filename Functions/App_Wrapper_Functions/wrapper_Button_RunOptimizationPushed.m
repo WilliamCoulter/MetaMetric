@@ -1,7 +1,7 @@
 function wrapper_Button_RunOptimizationPushed(app,event)
 try
     %% On button push, access certain components' values
-    app.HonorBoundsTF = app.CheckBox_HonorBounds.Value;
+%     app.HonorBoundsTF = app.CheckBox_HonorBounds.Value;
     % Make myUiFun structure
     app.myUiFun.myOptIterations = app.EditField_MaxIterations.Value; %Query edit field
     app.myUiFun.metric = string(app.DropDown_MetricGoal.Value); %Query dropdown selection
@@ -25,17 +25,29 @@ try
         'LessThanTF','LessThanVal',...
         'EqualToTF','EqualToVal',...
         'GreaterThanTF','GreaterThanVal'});
+    % Only if at least one TF is checked so we don't search and waste time
+    % in optimizer
+        lessThanTF = [app.myUiCon.LessThanTF];
+        equalToTF  = [app.myUiCon.EqualToTF];
+        greaterThanTF = [app.myUiCon.GreaterThanTF];
+        useAnyTF = [lessThanTF; equalToTF; greaterThanTF];
+        app.myUiCon(~any(useAnyTF) ) = [];
     for idx = 1:numel(app.myUiCon)
         app.myUiCon(idx).targetPath = getStructPathFromNode(app.Tree_Constraints,app.myUiCon(idx).Metric);
     end
     %% Go through nRuns
+
     bestFVal = inf; %best fval is infinity, so anything is better
     app.myBestOptimResult = []; %initialize to empty
+    f = figure(1);clf;
+    plotAx = axes(f);
+
     for idxRun = 1:app.EditField_NRuns.Value
+        cla(plotAx);
         %% Make a random guess
         app.InitialGuessChannelPercents_Prop = 25+75*rand(sum(app.channelSelectedTF),1);
         %% Run optimization
-        [SpdMixOut(idxRun), myOptimOptions,fVal(idxRun), optimizerOutput(idxRun),channelSolution] = runOptimization(app);
+        [SpdMixOut(idxRun), myOptimOptions,fVal(idxRun), optimizerOutput(idxRun),channelSolution ]= runOptimization(app,plotAx);
         %% Store results into one structure array
         app.myOptimResults(idxRun).Solution = channelSolution;
         app.myOptimResults(idxRun).spdPercents0 = app.InitialGuessChannelPercents_Prop;

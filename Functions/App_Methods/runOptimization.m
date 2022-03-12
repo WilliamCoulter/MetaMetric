@@ -1,4 +1,4 @@
-function [SpdMixOut, myOptimOptions, fVal,optimizerOutput,channelSolution] = runOptimization(app)
+function [SpdMixOut, myOptimOptions, fVal,optimizerOutput,channelSolution] = runOptimization(app, plotAx)
 %% Options and edit fields are called only on this button press
 
 % Get table from uitable
@@ -32,6 +32,6 @@ function [SpdMixOut, myOptimOptions, fVal,optimizerOutput,channelSolution] = run
 
 [SpdMixOut, myOptimOptions,fVal,optimizerOutput,channelSolution] = Main_Optimizer_Function_App_mfile(app.InitialGuessChannelPercents_Prop,...
     app.userSPDLibrary(:,app.channelSelectedTF),...
-    app.myUiCon,app.myUiFun);
+    app.myUiCon,app.myUiFun,plotAx);
 end
 

@@ -19,10 +19,10 @@ S_con = myUiConStruct; %rename for shorter code
 for conIdx = 1:numel(S_con)
     % Get the field value by using cell array argument chaining
 %     disp("Current Constraint Metric is " + S_con(conIdx).Metric)
+    
 
     currentVal = getfield(SpdStruct,S_con(conIdx).targetPath{:});
 
-%     disp("Current Value Of Con Metric is " + string(currentVal) )
 
     % Add < constraint violation
     if S_con(conIdx).LessThanTF ==1
