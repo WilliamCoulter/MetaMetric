@@ -88,7 +88,7 @@ smlmelrOpicELR = unitScale.*alpha_opic_radiant_flux/luminous_flux;
 %Alpha Opic Efficacy of Luminous Radiation For Daylight (D65), CIE S026
 %2018, 3.10
 
-K_D65_smlmelr = [0.8173, 1.4558, 1.6289, 1.3262, 1.4497];
+K_D65_smlmelr = [0.8173, 1.4558, 1.6289, 1.3262, 1.4497]./luminous_flux;
 
 % Via Note 2 to entry, abbreviated term is Alpha-Opic DER
 
