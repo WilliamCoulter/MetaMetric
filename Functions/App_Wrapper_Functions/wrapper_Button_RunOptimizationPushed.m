@@ -87,6 +87,7 @@ try
         optimPlots(2).XData = NaN(app.EditField_NRuns.Value,1);
         optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
         optimPlots(3) = plot(plotAx(3),app.wlVecProgram, [sum(app.userSPDLibrary,2)]);
+        optimPlots(3).Parent.XLim = [400,700];
 %         optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
 %         t3Lines = width([app.userSPDLibrary, sum(app.userSPDLibrary,2)]);
 
