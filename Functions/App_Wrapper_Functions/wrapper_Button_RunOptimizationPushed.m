@@ -78,10 +78,10 @@ try
 %     optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
 %     optimPlots(2) = plot()
     for idxRun = 1:app.EditField_NRuns.Value
-%         optimPlots(1).XData = NaN(app.EditField_NRuns.Value,1);
-%         optimPlots(1).YData = NaN(app.EditField_NRuns.Value,1);
-%         optimPlots(2).XData = NaN(app.EditField_NRuns.Value,1);
-%         optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
+        optimPlots(1).XData = NaN(app.EditField_NRuns.Value,1);
+        optimPlots(1).YData = NaN(app.EditField_NRuns.Value,1);
+        optimPlots(2).XData = NaN(app.EditField_NRuns.Value,1);
+        optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
 %         optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value), NaN(app.EditField_NRuns.Value),'-ok','MarkerFaceColor','k' );
 %         hold(plotAx,'on')
 
