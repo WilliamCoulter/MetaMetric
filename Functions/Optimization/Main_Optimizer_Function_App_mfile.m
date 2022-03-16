@@ -6,9 +6,6 @@ function [SpdMixOut,options,objectiveValue, fminconOutput,solution] = Main_Optim
 myOutFun = @(solution,optimValues,state)myOutFunPassed(solution,optimValues,state,spdChannels);
 SpdMix = [];
 spdPercentsCheck = [];
-% optimValuesHist = [];
-% f = figure;
-% plotAx = axes(f);
 %% Optimizer Output
 % Pass fixed parameters to objfun
 objfun = @(spdPercents)myObjFun(spdPercents,spdChannels,myUiFun);
@@ -75,10 +72,7 @@ SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
         stop = false;
         switch state
             case 'init'
-%                 optimPlots(1).XData = NaN(options.MaxIterations,1);
-%                 optimPlots(1).YData = NaN(options.MaxIterations,1);
-%                 optimPlots(2).XData = NaN(options.MaxIterations,1);
-%                 optimPlots(2).YData = NaN(options.MaxIterations,1);
+
             case 'iter' %store only the only things that go to output function :(
                 currentIter = optimValues.iteration;
                 if currentIter ~=0 %first iteration is 0, and we cannot index that way

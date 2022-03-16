@@ -50,20 +50,12 @@ try
         end
         app.myUiCon(~any(useAnyTF) ) = [];
 
-
     for idx = 1:numel(app.myUiCon)
         app.myUiCon(idx).targetPath = getStructPathFromNode(app.Tree_Constraints,app.myUiCon(idx).Metric);
     end
     %% Go through nRuns
-
     bestFVal = inf; %best fval is infinity, so anything is better
     app.myBestOptimResult = []; %initialize to empty
-    
-    %plot channels and sum to be overwritten by channel components and
-    %current optim spd
-%     optimPlots(3) = plot(plotAx(3),app.wlVecProgram, [sum(app.userSPDLibrary,2)]);
-    %%
-
     for idxRun = 1:app.EditField_NRuns.Value
         %% Setup output plot
         f = figure(1);clf;
@@ -88,15 +80,7 @@ try
         optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
         optimPlots(3) = plot(plotAx(3),app.wlVecProgram, [sum(app.userSPDLibrary,2)]);
         optimPlots(3).Parent.XLim = [400,700];
-%         optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
-%         t3Lines = width([app.userSPDLibrary, sum(app.userSPDLibrary,2)]);
 
-%         optimPlots(3:2+t3Lines) = plot(plotAx(3),app.wlVecProgram, [app.userSPDLibrary, sum(app.userSPDLibrary,2)]);
-
-%         optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value), NaN(app.EditField_NRuns.Value),'-ok','MarkerFaceColor','k' );
-%         hold(plotAx,'on')
-
-        %         cla(optimPlots(1));
         %% Make a random guess
         app.InitialGuessChannelPercents_Prop = 25+75*rand(sum(app.channelSelectedTF),1);
 
@@ -111,11 +95,7 @@ try
         app.myOptimResults(idxRun).myConstraintsTable = app.UITable_Constraints.Data;
         app.myOptimResults(idxRun).spdFileImportPath =  app.importedFileName_Prop;
         app.myOptimResults(idxRun).optimizerOutput = optimizerOutput(idxRun);
-%         app.myOptimResults(idxRun).iterationStop = iterationStop;
 
-
-%         isValid = ...
-%             min( app.myOptimResults(idxRun).Solution >=0) && optimizerOutput(idxRun).constrviolation < 1e-2;
         isValid = min( app.myOptimResults(idxRun).Solution >=0);
 
         %% Update best result
