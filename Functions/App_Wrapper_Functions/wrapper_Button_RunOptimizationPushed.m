@@ -58,43 +58,54 @@ try
 
     bestFVal = inf; %best fval is infinity, so anything is better
     app.myBestOptimResult = []; %initialize to empty
-    %% Setup output plot
-    f = figure(1);clf;
-    % Create 2x1 tile layout and preallocate NaN
-    tl = tiledlayout(f,2,1);
-    plotAx(1) = nexttile(tl,1);
-    hold(plotAx(1),'on');
-    ylabel(plotAx(1),'Obj. Value');xlabel(plotAx(1),'Iteration');
-    optimPlots(1) = plot(plotAx(1), NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
-
-    plotAx(2) = nexttile(tl,2);
-    hold(plotAx(2),'on');
-    ylabel(plotAx(2),'Constr. Violation');xlabel(plotAx(2),'Iteration');
-    optimPlots(2) = plot(plotAx(2), NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
+    
+    %plot channels and sum to be overwritten by channel components and
+    %current optim spd
+%     optimPlots(3) = plot(plotAx(3),app.wlVecProgram, [sum(app.userSPDLibrary,2)]);
     %%
-%     plotAx = axes(f);
-%     hold(plotAx,'on')
-%     ylabel(plotAx,'Obj. Value');xlabel('Iteration');
-%     optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
-%     optimPlots(2) = plot()
+
     for idxRun = 1:app.EditField_NRuns.Value
+        %% Setup output plot
+        f = figure(1);clf;
+        % Create 2x1 tile layout and preallocate NaN
+        tl = tiledlayout(f,3,1);
+        plotAx(1) = nexttile(tl,1);
+        hold(plotAx(1),'on');
+        ylabel(plotAx(1),'Obj. Value');xlabel(plotAx(1),'Iteration');
+        optimPlots(1) = plot(plotAx(1), NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
+    
+        plotAx(2) = nexttile(tl,2);
+        hold(plotAx(2),'on');
+        ylabel(plotAx(2),'Constr. Violation');xlabel(plotAx(2),'Iteration');
+        optimPlots(2) = plot(plotAx(2), NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
+        
+        plotAx(3) = nexttile(tl,3);
+        hold(plotAx(3),'on');
+        ylabel(plotAx(3),'Current SPD');xlabel(plotAx(3),'Wavelength (nm)');
         optimPlots(1).XData = NaN(app.EditField_NRuns.Value,1);
         optimPlots(1).YData = NaN(app.EditField_NRuns.Value,1);
         optimPlots(2).XData = NaN(app.EditField_NRuns.Value,1);
         optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
+        optimPlots(3) = plot(plotAx(3),app.wlVecProgram, [sum(app.userSPDLibrary,2)]);
+%         optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
+%         t3Lines = width([app.userSPDLibrary, sum(app.userSPDLibrary,2)]);
+
+%         optimPlots(3:2+t3Lines) = plot(plotAx(3),app.wlVecProgram, [app.userSPDLibrary, sum(app.userSPDLibrary,2)]);
+
 %         optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value), NaN(app.EditField_NRuns.Value),'-ok','MarkerFaceColor','k' );
 %         hold(plotAx,'on')
 
         %         cla(optimPlots(1));
         %% Make a random guess
         app.InitialGuessChannelPercents_Prop = 25+75*rand(sum(app.channelSelectedTF),1);
+
         %% Run optimization
         [SpdMixOut(idxRun), myOptimOptions,fVal(idxRun), optimizerOutput(idxRun),channelSolution ]= runOptimization(app,optimPlots);
         %% Store results into one structure array
         app.myOptimResults(idxRun).Solution = channelSolution;
         app.myOptimResults(idxRun).spdPercents0 = app.InitialGuessChannelPercents_Prop;
         app.myOptimResults(idxRun).myUiFun = app.myUiFun; %never changed so not really needed
-%         not needed
+        %         not needed
         app.myOptimResults(idxRun).myOptimOptions = myOptimOptions;
         app.myOptimResults(idxRun).myConstraintsTable = app.UITable_Constraints.Data;
         app.myOptimResults(idxRun).spdFileImportPath =  app.importedFileName_Prop;

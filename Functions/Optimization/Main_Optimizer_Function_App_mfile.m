@@ -84,6 +84,7 @@ SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
                 if currentIter ~=0 %first iteration is 0, and we cannot index that way
                     try
                         optimPlots(1).XData(optimValues.iteration) = optimValues.iteration;
+                        
                     catch
                         error('caught'); %for debugging workspace.
                     end
@@ -93,6 +94,9 @@ SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
                     optimPlots(2).XData(optimValues.iteration) = optimValues.iteration;
                     optimPlots(2).YData(optimValues.iteration) = optimValues.constrviolation;
                     optimPlots(2).Parent.Title.String = "Constr Violation: " + optimValues.constrviolation;
+                    optimPlots(3).YData = spdChannels*solution;         
+%                     optimPlots(3:end).YData = [spdChannels.*solution', spdChannels*solution];%                     optimPlot(3).YData = 
+
                     drawnow
                 end
             case 'done' %recreate all the metrics
@@ -100,6 +104,8 @@ SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
                 optimPlots(1).YData(optimValues.iteration) = optimValues.fval;
                 optimPlots(2).XData(optimValues.iteration) = optimValues.iteration;
                 optimPlots(2).YData(optimValues.iteration) = optimValues.constrviolation;
+                optimPlots(3).YData = spdChannels*solution;         
+
                 drawnow
         end
     end
