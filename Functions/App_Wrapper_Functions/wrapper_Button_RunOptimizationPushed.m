@@ -58,16 +58,34 @@ try
 
     bestFVal = inf; %best fval is infinity, so anything is better
     app.myBestOptimResult = []; %initialize to empty
+    %% Setup output plot
     f = figure(1);clf;
-    % Preallocate the x and y data points of the plot to drastically speed
-    % it up
-    plotAx = axes(f);
-%     optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value), NaN(app.EditField_NRuns.Value),'-ok','MarkerFaceColor','k' );
-    
-    for idxRun = 1:app.EditField_NRuns.Value
-        optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value), NaN(app.EditField_NRuns.Value),'-ok','MarkerFaceColor','k' );
+    % Create 2x1 tile layout and preallocate NaN
+    tl = tiledlayout(f,2,1);
+    plotAx(1) = nexttile(tl,1);
+    hold(plotAx(1),'on');
+    ylabel(plotAx(1),'Obj. Value');xlabel(plotAx(1),'Iteration');
+    optimPlots(1) = plot(plotAx(1), NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
 
-%         cla(optimPlots(1));
+    plotAx(2) = nexttile(tl,2);
+    hold(plotAx(2),'on');
+    ylabel(plotAx(2),'Constr. Violation');xlabel(plotAx(2),'Iteration');
+    optimPlots(2) = plot(plotAx(2), NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
+    %%
+%     plotAx = axes(f);
+%     hold(plotAx,'on')
+%     ylabel(plotAx,'Obj. Value');xlabel('Iteration');
+%     optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value,1), NaN(app.EditField_NRuns.Value,1),'-ok','MarkerFaceColor','k' );
+%     optimPlots(2) = plot()
+    for idxRun = 1:app.EditField_NRuns.Value
+%         optimPlots(1).XData = NaN(app.EditField_NRuns.Value,1);
+%         optimPlots(1).YData = NaN(app.EditField_NRuns.Value,1);
+%         optimPlots(2).XData = NaN(app.EditField_NRuns.Value,1);
+%         optimPlots(2).YData = NaN(app.EditField_NRuns.Value,1);
+%         optimPlots(1) = plot(plotAx, NaN(app.EditField_NRuns.Value), NaN(app.EditField_NRuns.Value),'-ok','MarkerFaceColor','k' );
+%         hold(plotAx,'on')
+
+        %         cla(optimPlots(1));
         %% Make a random guess
         app.InitialGuessChannelPercents_Prop = 25+75*rand(sum(app.channelSelectedTF),1);
         %% Run optimization
@@ -84,8 +102,9 @@ try
 %         app.myOptimResults(idxRun).iterationStop = iterationStop;
 
 
-        isValid = ...
-            min( app.myOptimResults(idxRun).Solution >=0) && optimizerOutput(idxRun).constrviolation < 1e-2;
+%         isValid = ...
+%             min( app.myOptimResults(idxRun).Solution >=0) && optimizerOutput(idxRun).constrviolation < 1e-2;
+        isValid = min( app.myOptimResults(idxRun).Solution >=0);
 
         %% Update best result
         % if the run is valid AND the optimized value is the
@@ -96,6 +115,8 @@ try
             bestFVal = fVal(idxRun);
             app.myBestOptimResult = app.myOptimResults(idxRun);
             app.myBestSpdMix      = SpdMixOut(idxRun);
+            % set a flag to check if constraints were violated
+            badConstraintViolationFlag = optimizerOutput(idxRun).constrviolation >1e-2;
         end
 
     end
@@ -130,6 +151,14 @@ try
 
     %%
     uialert(app.UIFigure,"Go to Next Pane",'Optimization Complete','icon','info')
+
+    if badConstraintViolationFlag
+        msg = {'Constraint violation > 0.01.',...
+            'Your constraints may be impossible, too difficult, or more runs should be attempted',...
+            'It is also possible that you chose a > and < for a metric in which case ignore this message'};
+        uialert(app.UIFigure,msg,...
+            "Constraints Violated",'Icon','warning');
+    end
 
 catch ME
     report = getReport(ME);
