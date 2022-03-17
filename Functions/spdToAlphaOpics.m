@@ -91,11 +91,17 @@ smlmelrOpicELR = unitScale.*alpha_opic_radiant_flux/luminous_flux;
 K_D65_smlmelr = [0.8173, 1.4558, 1.6289, 1.3262, 1.4497]./luminous_flux;
 
 % Via Note 2 to entry, abbreviated term is Alpha-Opic DER
+% 
+% SOut.sOpicDER   = smlmelrOpicELR(1) / K_D65_smlmelr(1);
+% SOut.mOpicDER   = smlmelrOpicELR(2) / K_D65_smlmelr(2);
+% SOut.lOpicDER   = smlmelrOpicELR(3) / K_D65_smlmelr(3);
+% SOut.melOpicDER = smlmelrOpicELR(4) / K_D65_smlmelr(4);
+% SOut.rOpicDER   = smlmelrOpicELR(5) / K_D65_smlmelr(5);
 
-SOut.sOpicDER   = smlmelrOpicELR(1) / K_D65_smlmelr(1);
-SOut.mOpicDER   = smlmelrOpicELR(2) / K_D65_smlmelr(2);
-SOut.lOpicDER   = smlmelrOpicELR(3) / K_D65_smlmelr(3);
-SOut.melOpicDER = smlmelrOpicELR(4) / K_D65_smlmelr(4);
-SOut.rOpicDER   = smlmelrOpicELR(5) / K_D65_smlmelr(5);
+SOut.sOpicELR = smlmelrOpicELR(1);
+SOut.mOpicELR = smlmelrOpicELR(2);
+SOut.lOpicELR = smlmelrOpicELR(3);
+SOut.melOpicELR = smlmelrOpicELR(4);
+SOut.rOpicELR = smlmelrOpicELR(5);
 
 end
