@@ -15,38 +15,24 @@ S_con = myUiConStruct; %rename for shorter code
 %     GreaterThanVal
 %     targetPath
 
-
 for conIdx = 1:numel(S_con)
     % Get the field value by using cell array argument chaining
-%     disp("Current Constraint Metric is " + S_con(conIdx).Metric)
-    
-
     currentVal = getfield(SpdStruct,S_con(conIdx).targetPath{:});
-
-
     % Add < constraint violation
     if S_con(conIdx).LessThanTF ==1
         constraintVal = S_con(conIdx).LessThanVal;
         c(end+1,1) = currentVal - constraintVal;
-%         disp("Needs to be less than " + string(constraintVal) )
-%         disp("Violation is " + string(c(end,1) ) )
     end
     % Add > constraint violation
     if S_con(conIdx).GreaterThanTF ==1
         constraintVal = S_con(conIdx).GreaterThanVal;
-        c(end+1,1) = -1* [ currentVal - constraintVal];
-%         disp("Needs to be greater than " + string(constraintVal) )
-%         disp("Violation is " + string(c(end,1) ) )
+        c(end+1,1) = -1* ( currentVal - constraintVal);
     end
     % Add == constraint violation
     if S_con(conIdx).EqualToTF == 1
         constraintVal = S_con(conIdx).EqualToVal;
         ceq(end+1,1) = currentVal - constraintVal;
-%         disp("Needs to be equal to " + string(constraintVal) )
-%         disp("Violation is " + string(ceq(end,1) ) )
     end
-
-
 
 end
 % % for iMetric = 1:height(t) %go through each row (metric name)

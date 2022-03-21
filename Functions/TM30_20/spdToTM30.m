@@ -297,8 +297,8 @@ SOutTM30Struct.Trichromatic.duv     = Duv_test;
 %Power
 
 SOutTM30Struct.Power.radWatts = trapz(wavelength, StestIn.s);
-SOutTM30Struct.Power.ler2  = SOutTM30Struct.Trichromatic.spd2degY./SOutTM30Struct.Power.radWatts;
-SOutTM30Struct.Power.ler10 = SOutTM30Struct.Trichromatic.spd10degY./SOutTM30Struct.Power.radWatts;
+SOutTM30Struct.Power.ler2  = 683.02*SOutTM30Struct.Trichromatic.spd2degY./SOutTM30Struct.Power.radWatts;
+SOutTM30Struct.Power.ler10 = 683.02*SOutTM30Struct.Trichromatic.spd10degY./SOutTM30Struct.Power.radWatts;
 SOutTM30Struct.Power.s = StestIn.s;
 
 end

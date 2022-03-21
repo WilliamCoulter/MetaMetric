@@ -27,6 +27,7 @@ end
 
 [SpdStruct.AOpics] = spdToAlphaOpics(SpdStruct); %add fields
 %% Future Metrics 1
+% [SpdStruct.Circadian] = spdToCircadian(SpdStruct);
 %     [SpdMixStruct.NewCategory] = spdToMetamericIndex(SpdMixStruct);
 %SpdMixStruct = FUTUREFUNCTION(SpdMixStruct);
 % % % OR if your function cannot handle a struct:
