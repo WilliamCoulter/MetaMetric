@@ -38,13 +38,13 @@ else
 end
 %% I want to use persistent values, but I want them different from the table so I don't have issues
 if isempty(A_CMF_Inside) || isempty(RxArray) || isempty(A_TCS_Inside) || isempty(A_DSeries_Inside)
-    load('TM30_V204_Arrays.mat');
+    SLoad = load('TM30_V204_Arrays.mat');
 %     disp('Loading TM30 V2.04 Data')
-    A_CMF_Inside = A_CMF;
-    RxArray = A_CES(1:wlInt:end,2:end);
+    A_CMF_Inside = SLoad.A_CMF;
+    RxArray = SLoad.A_CES(1:wlInt:end,2:end);
 
-    A_TCS_Inside = A_TCS;
-    A_DSeries_Inside = A_DSeries;
+    A_TCS_Inside = SLoad.A_TCS;
+    A_DSeries_Inside = SLoad.A_DSeries;
 end
 
 if isempty(A_Planck)
