@@ -17,9 +17,10 @@ end
 app.wlVecProgram = [];
 % app.wlIntProgram = 
 app.wlVecProgram(:,1) = 380:5:780;
-
 %% Create dummy struct
-dummyStruct = channelPercentsToSPDNestedStruct(ones(401,1));
+sig = 50/2.355; %fwhm of 50nm to sigma for gauss distr.
+dummySpd(:,1) = exp( -(app.wlVecProgram - 555).^2/(2*sig^2));
+dummyStruct = channelPercentsToSPDNestedStruct(dummySpd);
 fn = fieldnames(dummyStruct);
 
 for fnIdx = 1:numel(fn)
