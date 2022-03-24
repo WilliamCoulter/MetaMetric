@@ -74,13 +74,13 @@ SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
             case 'init'
 
             case 'iter' %store only the only things that go to output function :(
-                currentIter = optimValues.iteration;
+                currentIter = optimValues.iteration
                 if currentIter ~=0 %first iteration is 0, and we cannot index that way
                     try
                         optimPlots(1).XData(optimValues.iteration) = optimValues.iteration;
                         
                     catch
-                        error('caught'); %for debugging workspace.
+                        error("Could not set xdata of optimPlots(1) to current iteration"); %for debugging workspace.
                     end
                     % plot onto the two tiles
                     optimPlots(1).YData(optimValues.iteration) = optimValues.fval;
@@ -89,8 +89,7 @@ SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
                     optimPlots(2).YData(optimValues.iteration) = optimValues.constrviolation;
                     optimPlots(2).Parent.Title.String = "Constr Violation: " + optimValues.constrviolation;
                     optimPlots(3).YData = spdChannels*solution;         
-                    optimPlots(3:end).YData = [spdChannels.*solution', spdChannels*solution];%                     optimPlot(3).YData = 
-
+%                     optimPlots(3:end).YData = [spdChannels.*solution', spdChannels*solution];
                     drawnow
                 end
             case 'done' %recreate all the metrics
