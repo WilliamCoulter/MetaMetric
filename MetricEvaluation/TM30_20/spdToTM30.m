@@ -1,11 +1,11 @@
-function [SOutTM30Struct] = spdToTM30(StestIn)
+function [SOutTM30Struct] = spdToTM30(SpdStruct)
 
 %% ANSI_IES_TM_30_20_Coulter_Edit Help: Takes an spd from 380nm to 780nm in either 1 or 5nm increments (401,1) or (81,1)
 %% and an array of CMFs
 %% arrayCMFs should have [wavelength, x2,y2,z2, x10,y10,z10] in 380 to 780 in 1 nm increments
 %%
 arguments
-    StestIn (1,1) {mustBeA(StestIn,"struct")}
+    SpdStruct (1,1) {mustBeA(SpdStruct,"struct")}
 end
 
 persistent A_CMF_Inside RxArray A_TCS_Inside A_DSeries_Inside A_Planck
@@ -24,7 +24,7 @@ persistent A_CMF_Inside RxArray A_TCS_Inside A_DSeries_Inside A_Planck
 % 1) Update CCT calculation
 % 2)
 %%
-Stest = StestIn.s; % no index so the code is flexible. rewritten each time
+Stest = SpdStruct.Power.s; % no index so the code is flexible. rewritten each time
 %%move on with Stest as the metric to run
 %% determine wl itnerval from iput stest
 if length(Stest)==81
@@ -247,7 +247,7 @@ SOutTM30Struct.TM30.rfBins = struct(rfBinArgs{:});
 
 %% Trichromatic Metrics
 % 2Deg
-t2XYZ   = StestIn.s'*[xbar,ybar,zbar];
+t2XYZ   = SpdStruct.Power.s'*[xbar,ybar,zbar];
     % SOut.test2degX    = t2XYZ(1);
     % SOut.test2degY    = t2XYZ(2);
     % SOut.test2degZ    = t2XYZ(3);
@@ -264,7 +264,7 @@ SOutTM30Struct.Trichromatic.spd2degy = t2xy(2);
 
 % 10 Deg
 %     SOut.t10XYZ  = Stest'*[xbar_10, ybar_10, zbar_10];
-t10XYZ = StestIn.s'*[xbar_10, ybar_10, zbar_10];
+t10XYZ = SpdStruct.Power.s'*[xbar_10, ybar_10, zbar_10];
 % SOut.test10degX = t10XYZ(1);
 % SOut.test10degY = t10XYZ(2);
 % SOut.test10degZ = t10XYZ(3);
@@ -296,9 +296,10 @@ SOutTM30Struct.Trichromatic.duv     = Duv_test;
 
 %Power
 
-SOutTM30Struct.Power.radWatts = trapz(wavelength, StestIn.s);
+SOutTM30Struct.Power.radWatts = trapz(wavelength, SpdStruct.Power.s);
 SOutTM30Struct.Power.ler2  = 683.02*SOutTM30Struct.Trichromatic.spd2degY./SOutTM30Struct.Power.radWatts;
 SOutTM30Struct.Power.ler10 = 683.02*SOutTM30Struct.Trichromatic.spd10degY./SOutTM30Struct.Power.radWatts;
-SOutTM30Struct.Power.s = StestIn.s;
+SOutTM30Struct.Power.s = SpdStruct.Power.s;
+SOutTM30Struct.Power.wl = (380:wlInt:780)';
 
 end

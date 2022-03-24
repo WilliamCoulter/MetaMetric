@@ -1,4 +1,4 @@
-function [SOut] = spdToAlphaOpics( SpdIn)
+function [SpdStruct] = spdToAlphaOpics( SpdStruct)
 %% Takes in 380:1:780nm spd in Watts and returns a structure of the alpha-opic efficacies of luminous radiation according to CIE S026E2018 in "W/Lm"
 
 %% Definition
@@ -28,7 +28,7 @@ function [SOut] = spdToAlphaOpics( SpdIn)
 
 
 arguments
-    SpdIn (1,1) {isstruct}
+    SpdStruct (1,1) {isstruct}
 end
 
 %% Set Constants
@@ -38,11 +38,11 @@ unitScale = 1000; %default output is watts. Multiply by 1000 to get mW/lm
 %%
 % spd(:,1) = SpdIn; %ensure column vec
 % 
-if length(SpdIn.Power.s) ==401
+if length(SpdStruct.Power.s) ==401
     wlInt =1;
-elseif length(SpdIn.Power.s) ==81
+elseif length(SpdStruct.Power.s) ==81
     wlInt = 5;
-elseif length(SpdIn.Power.s) == 201
+elseif length(SpdStruct.Power.s) == 201
     wlInt = 2;
 else
     error("wavelength interval is inocorrect")
@@ -78,10 +78,10 @@ smlmelrOpic = smlmelrOpicLoad(1:wlInt:end,:);
 % sense for each row to be a variable
 %therefore, it is s' *opics
 % alpha_opic_radiant_flux = spd'*[sOpic, mOpic, lOpic, melOpic, rOpic];
-alpha_opic_radiant_flux = SpdIn.Power.s'*[smlmelrOpic];
+alpha_opic_radiant_flux = SpdStruct.Power.s'*[smlmelrOpic];
 
 % the luminous flux is the same for each opic calculation
-luminous_flux           = K_m*SpdIn.Power.s'*vLambda;
+luminous_flux           = K_m*SpdStruct.Power.s'*vLambda;
 
 smlmelrOpicELR = unitScale.*alpha_opic_radiant_flux/luminous_flux;
 %% Obtain Daylight (D65) Efficacy Ratio
@@ -98,10 +98,15 @@ K_D65_smlmelr = [0.8173, 1.4558, 1.6289, 1.3262, 1.4497]./luminous_flux;
 % SOut.melOpicDER = smlmelrOpicELR(4) / K_D65_smlmelr(4);
 % SOut.rOpicDER   = smlmelrOpicELR(5) / K_D65_smlmelr(5);
 
-SOut.sOpicELR = smlmelrOpicELR(1);
-SOut.mOpicELR = smlmelrOpicELR(2);
-SOut.lOpicELR = smlmelrOpicELR(3);
-SOut.melOpicELR = smlmelrOpicELR(4);
-SOut.rOpicELR = smlmelrOpicELR(5);
+% SOut.sOpicELR = smlmelrOpicELR(1);
+% SOut.mOpicELR = smlmelrOpicELR(2);
+% SOut.lOpicELR = smlmelrOpicELR(3);
+% SOut.melOpicELR = smlmelrOpicELR(4);
+% SOut.rOpicELR = smlmelrOpicELR(5);
+SpdStruct.AOpics.sOpicELR = smlmelrOpicELR(1);
+SpdStruct.AOpics.mOpicELR = smlmelrOpicELR(2);
+SpdStruct.AOpics.lOpicELR = smlmelrOpicELR(3);
+SpdStruct.AOpics.melOpicELR = smlmelrOpicELR(4);
+SpdStruct.AOpics.rOpicELR = smlmelrOpicELR(5);
 
 end

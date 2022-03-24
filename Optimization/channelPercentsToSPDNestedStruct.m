@@ -7,9 +7,9 @@ function [SpdStruct] = channelPercentsToSPDNestedStruct(spdArray,spdPercents)
 
 switch nargin
     case 1
-        SpdStruct.s = spdArray; 
+        SpdStruct.Power.s = spdArray; 
     case 2
-        SpdStruct.s = spdArray*spdPercents;
+        SpdStruct.Power.s = spdArray*spdPercents;
     otherwise
         error("Invalid amount of arguments into function")
 end
@@ -25,8 +25,12 @@ end
 %Verification:  "CIE_S026_Alpha_Opic_Toolbox_V1_049a_2020_Nov.xlsx"
 %Excel file under "/Standards/CIES026_E2018"
 
-[SpdStruct.AOpics] = spdToAlphaOpics(SpdStruct); %add fields
+[SpdStruct] = spdToAlphaOpics(SpdStruct); %add fields
 %% Future Metrics 1
+% The following is a template for a new metric. Right click the name of
+% "spdToNewMetric" to go to the file.
+% [SpdStruct.NewMetrics] = spdToNewMetric(SpdStruct)
+
 % [SpdStruct.Circadian] = spdToCircadian(SpdStruct);
 %     [SpdMixStruct.NewCategory] = spdToMetamericIndex(SpdMixStruct);
 %SpdMixStruct = FUTUREFUNCTION(SpdMixStruct);

@@ -12,8 +12,11 @@ function metricResultsStructToTable(app)
 for idx = 1:numel(app.allPossibleMetrics)
     
     [fieldNamePath] = getStructPathFromNode(app.Tree_Constraints,app.allPossibleMetrics{idx} );
-    metricVal{idx,1} = getfield(app.myBestSpdMix, fieldNamePath{:});
-
+    try
+        metricVal{idx,1} = getfield(app.myBestSpdMix, fieldNamePath{:});
+    catch
+        disp('t')
+    end
 end
 
 t = array2table([app.allPossibleMetrics, metricVal]);
