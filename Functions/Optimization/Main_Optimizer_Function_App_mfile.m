@@ -89,7 +89,7 @@ SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
                     optimPlots(2).YData(optimValues.iteration) = optimValues.constrviolation;
                     optimPlots(2).Parent.Title.String = "Constr Violation: " + optimValues.constrviolation;
                     optimPlots(3).YData = spdChannels*solution;         
-%                     optimPlots(3:end).YData = [spdChannels.*solution', spdChannels*solution];%                     optimPlot(3).YData = 
+                    optimPlots(3:end).YData = [spdChannels.*solution', spdChannels*solution];%                     optimPlot(3).YData = 
 
                     drawnow
                 end
