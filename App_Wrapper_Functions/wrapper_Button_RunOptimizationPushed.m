@@ -96,7 +96,7 @@ try
         app.myOptimResults(idxRun).spdFileImportPath =  app.importedFileName_Prop;
         app.myOptimResults(idxRun).optimizerOutput = optimizerOutput(idxRun);
 
-        isValid = min( app.myOptimResults(idxRun).Solution >=0);
+        isValid = min( app.myOptimResults(idxRun).Solution >=-eps);
 
         %% Update best result
         % if the run is valid AND the optimized value is the

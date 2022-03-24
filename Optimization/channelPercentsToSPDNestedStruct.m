@@ -29,7 +29,7 @@ end
 %% Future Metrics 1
 % The following is a template for a new metric. Right click the name of
 % "spdToNewMetric" to go to the file.
-% [SpdStruct.NewMetrics] = spdToNewMetric(SpdStruct)
+[SpdStruct] = spdToNewMetric(SpdStruct);
 
 % [SpdStruct.Circadian] = spdToCircadian(SpdStruct);
 %     [SpdMixStruct.NewCategory] = spdToMetamericIndex(SpdMixStruct);

@@ -74,7 +74,7 @@ SpdMixOut = channelPercentsToSPDNestedStruct(spdChannels,solution);
             case 'init'
 
             case 'iter' %store only the only things that go to output function :(
-                currentIter = optimValues.iteration
+                currentIter = optimValues.iteration;
                 if currentIter ~=0 %first iteration is 0, and we cannot index that way
                     try
                         optimPlots(1).XData(optimValues.iteration) = optimValues.iteration;
