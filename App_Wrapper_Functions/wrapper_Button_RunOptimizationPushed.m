@@ -154,7 +154,14 @@ try
 
 catch ME
     report = getReport(ME);
+    if size(app.userSPDLibrary,2)
+        warningMessage = {'The number of SPDs you are evaluating is less than 3',...
+            'You might need to make sure you highlighted the SPDs on tab 1 and pressed "Import Selected SPDs" '};
+        uialert(app.UIFigure, warningMessage,'Warning','Icon','warning');
+        return
+    end 
     uialert(app.UIFigure, report, 'Error Message', 'Interpreter','html')
+
 end
 
 

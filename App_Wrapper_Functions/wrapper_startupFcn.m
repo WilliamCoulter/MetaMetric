@@ -6,13 +6,14 @@ function wrapper_startupFcn(app)
 % to
 % 3) Generate UIConstraint Table
 %% Load previous session's output folder
-try
-    loadMyDefaults(app);
-catch ME
-    report = getReport(ME);
-    uialert(app.UIFigure, report, 'Error Message', 'Interpreter','html')
+if ~isdeployed
+    try
+        loadMyDefaults(app);
+    catch ME
+        report = getReport(ME);
+        uialert(app.UIFigure, report, 'Error Message', 'Interpreter','html')
+    end
 end
-
 %% Specify wavelength vector the program works with
 app.wlVecProgram = [];
 % app.wlIntProgram = 
