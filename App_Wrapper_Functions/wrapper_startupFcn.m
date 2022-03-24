@@ -6,7 +6,7 @@ function wrapper_startupFcn(app)
 % to
 % 3) Generate UIConstraint Table
 %% Load previous session's output folder
-if ~isdeployed
+if isdeployed ==0
     try
         loadMyDefaults(app);
     catch ME
