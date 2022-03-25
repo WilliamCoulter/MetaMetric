@@ -222,7 +222,10 @@ fullData.Bins.Rhs = ...
 
 %% TM30
 %             Rf_hbin = 10*log(exp(Rf_h_temp/10)+1);
-SOutTM30Struct.TM30.rf = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
+% SOutTM30Struct.TM30.rf = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
+rfUncorrected = 100 - 6.73 * (sum(deltaE_CAM02) ./ 99);
+% SOutTM30Struct.TM30.rfUncorrected = rfUncorrected;
+SOutTM30Struct.TM30.rf= 10*log( exp(rfUncorrected / 10) + 1); 
 SOutTM30Struct.TM30.rg = fullData.Rg;
 
 SOutTM30Struct.TM30.gref = ref.Bins.Jabz(:,2:3);
