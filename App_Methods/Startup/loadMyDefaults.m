@@ -42,7 +42,6 @@ if isfile(defaultFileName) %check file exists
         %% Important! Remove Parent property, as it seems setting this poofs tables away and are no longer accesible
         %Parent is known to cause big errors, but the rest seem like bad practice to set
         metaPropsList(contains(metaPropsList,metaPropsNotToLoad) ) =[];
-
         %% Go through jth metaproperty for the ith "thing" that was saved
         for j = 1:numel(metaPropsList)
             %% Try to set jth metaproperty of ith "thing" for current app.

@@ -14,6 +14,8 @@ if isdeployed ==0
         uialert(app.UIFigure, report, 'Error Message', 'Interpreter','html')
     end
 end
+%%
+format shortG
 %% Specify wavelength vector the program works with
 app.wlVecProgram = [];
 % app.wlIntProgram = 

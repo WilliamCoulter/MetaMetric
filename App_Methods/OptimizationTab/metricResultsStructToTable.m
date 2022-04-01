@@ -21,6 +21,7 @@ end
 
 t = array2table([app.allPossibleMetrics, metricVal]);
 t.Properties.VariableNames = ["Metrics", "Value of Optimized SPD"];
+t.Properties.RowNames = t{:,"Metrics"};
 metricsOfInterest = cellstr( [app.myUiFun.metric, {app.myUiCon.Metric} ]' );
 moiRowId = find(ismember(t.Metrics, metricsOfInterest));
 tmoi = [t(moiRowId,:)];
